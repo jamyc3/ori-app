@@ -1,0 +1,142 @@
+/* Ori v2 — Reflect page. Page-specific layout only; the flow controls reuse
+   the existing .v2-ack-* classes from parts.css so the look matches the prior
+   inline flow exactly. New classes live here (parts.css stays untouched). */
+
+[data-skin="v2"] .v2-reflect {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* The invisible input — fills the page so the borderless write area has room to
+   breathe (the Today-capture pattern), with the question pinned above it. */
+[data-skin="v2"] .v2-reflect-input {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* The pinned question — quiet, stays put while writing/speaking. Tighter than the
+   capture prompt since a part header already sits above it. */
+[data-skin="v2"] .v2-reflect-q {
+  font-size: calc(23px * var(--read-scale));
+  margin: 4px 0 14px;
+  flex: 0 0 auto;
+}
+/* Earlier turns — the path so far, dimmed so it never competes with the live
+   question. Their own words, capped in JS. */
+[data-skin="v2"] .v2-reflect-thread {
+  flex: 0 0 auto;
+  margin: 10px 0 2px;
+  padding-left: 12px;
+  border-left: 2px solid color-mix(in srgb, var(--forest) 22%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+[data-skin="v2"] .v2-reflect-thread-line {
+  font-family: var(--fr);
+  font-size: calc(14px * var(--read-scale));
+  line-height: 1.45;
+  color: var(--faint);
+  margin: 0;
+}
+/* The foot is ONE quiet row: a close ✕, the status, the mic, and Reflect — no
+   stacked "Not now" below. Status takes the slack so ✕ pins left, mic+pill right. */
+[data-skin="v2"] .v2-reflect-foot { gap: 8px; }
+[data-skin="v2"] .v2-reflect-foot .v2-write-status { flex: 1 1 auto; min-width: 0; }
+[data-skin="v2"] .v2-reflect-x {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-skin="v2"] .v2-reflect-x:active { opacity: .55; }
+
+/* Help text is help text — keep the placeholder small and faint so it never
+   competes with the question (the one thing to read) above it. */
+[data-skin="v2"] .v2-reflect .v2-write-area::placeholder {
+  font-size: calc(15px * var(--read-scale));
+  color: var(--faint);
+}
+
+[data-skin="v2"] .v2-reflect-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  margin: 8px 0 22px;
+}
+[data-skin="v2"] .v2-reflect-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--forest) 28%, transparent);
+  background: color-mix(in srgb, var(--forest) 7%, transparent);
+  margin-bottom: 4px;
+}
+[data-skin="v2"] .v2-reflect-head .v2-pd-name { text-align: center; }
+[data-skin="v2"] .v2-reflect-head .v2-pd-desc { text-align: center; max-width: 30ch; }
+
+[data-skin="v2"] .v2-reflect-body { margin-top: 4px; }
+[data-skin="v2"] .v2-reflect-text {
+  min-height: 140px;
+  line-height: 1.5;
+}
+[data-skin="v2"] .v2-reflect-actions { margin-top: 14px; }
+
+/* The PartDetail doorway, reimagined as the spiral icon + a quiet label
+   (replaces the old full-width dashed "Say a little about…" link). */
+[data-skin="v2"] .v2-pd-reflect-doorway {
+  margin-top: 16px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--forest) 26%, transparent);
+  border-radius: 14px;
+  padding: 13px 18px;
+  color: var(--forest);
+  font-family: var(--fm);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s;
+}
+[data-skin="v2"] .v2-pd-reflect-doorway:active {
+  background: color-mix(in srgb, var(--forest) 8%, transparent);
+}
+/* When the part keeps showing up unreflected, the doorway warms a touch so the
+   invitation is a little more present — never loud, never a nag. */
+[data-skin="v2"] .v2-pd-reflect-doorway.tending {
+  border-color: color-mix(in srgb, var(--forest) 42%, transparent);
+  background: color-mix(in srgb, var(--forest) 6%, transparent);
+}
+/* The on-part "keeps showing up" line — quiet, with its ⓘ provenance chip. */
+[data-skin="v2"] .v2-pd-tending {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 18px 0 0;
+  font-family: var(--fr);
+  font-size: calc(14px * var(--read-scale));
+  font-style: italic;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-pd-reflect-doorway .v2-reflect-ico {
+  display: inline-flex;
+  color: var(--forest);
+}

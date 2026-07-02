@@ -1,0 +1,141 @@
+/* Ori v2 — quiet check-in (WHO-5)
+ * Design's "Talk — quiet check-in" screen: eyebrow, centered question,
+ * dot scale with end labels, soft note, skip / continue footer.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-checkin {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 0 calc(env(safe-area-inset-bottom, 12px) + 24px);
+}
+
+[data-skin="v2"] .v2-ci-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 4px;
+  text-align: center;
+}
+
+[data-skin="v2"] .v2-ci-center {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  min-height: 0;
+}
+
+[data-skin="v2"] .v2-ci-q {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(25px * var(--read-scale));
+  line-height: 1.35;
+  color: var(--ink);
+  text-align: center;
+}
+
+[data-skin="v2"] .v2-ci-lead {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--muted);
+  text-align: center;
+  margin-top: -16px;
+}
+
+[data-skin="v2"] .v2-ci-scale {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 14px;
+}
+/* The button is a full 44px tap target (WCAG 2.5.5 / Apple HIG) — it's the only
+   control on the check-in — while the visible dot is drawn smaller via ::before.
+   Hit area and visual size are decoupled so the dot stays delicate but tappable. */
+[data-skin="v2"] .v2-ci-dot {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-skin="v2"] .v2-ci-dot::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 11px;
+  border: 2px solid var(--line);
+  background: transparent;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-ci-dot.sel::before {
+  width: 26px;
+  height: 26px;
+  background: var(--forest);
+  border-color: var(--forest);
+}
+/* Visible keyboard focus — the dots are arrow-navigable, so a focus ring is
+   needed to show where selection sits. (Pointer taps stay ring-free.) */
+[data-skin="v2"] .v2-ci-dot:focus-visible {
+  outline: none;
+}
+[data-skin="v2"] .v2-ci-dot:focus-visible::before {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+
+[data-skin="v2"] .v2-ci-labels {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-ci-labels span {
+  text-align: center;
+  white-space: nowrap;
+}
+[data-skin="v2"] .v2-ci-labels span.on {
+  color: var(--forest);
+}
+
+[data-skin="v2"] .v2-ci-note {
+  font-family: var(--fb);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+}
+
+[data-skin="v2"] .v2-ci-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+}
+[data-skin="v2"] .v2-ci-ghost {
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  padding: 10px;
+  cursor: pointer;
+}

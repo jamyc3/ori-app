@@ -1,0 +1,459 @@
+/* Ori v2 — Settings
+ * Design's group cards: .group/.srow/.sub/.toggle/.tsize, v2-prefixed.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-settings {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 0 0 calc(env(safe-area-inset-bottom, 12px) + 24px);
+
+  /* One settings type scale. Every size on this surface resolves to one of these
+     four roles, so the screen reads on a single rhythm instead of a dozen
+     one-off sizes. The two reading sizes ride --read-scale; the small UI labels
+     are fixed chrome. The only deliberate exception is the S/M/L text-size
+     picker, whose buttons must preview their own sizes. */
+  --set-title: calc(32px * var(--read-scale));  /* page title */
+  --set-body:  calc(15px * var(--read-scale));  /* row label + value, inputs, stepper */
+  --set-meta:  12.5px;                           /* sub-text, chips, selects, segmented */
+  --set-label: 9.5px;                            /* eyebrows + micro uppercase labels */
+}
+
+[data-skin="v2"] .v2-set-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: var(--set-title);
+  color: var(--ink);
+  margin: 0;
+  padding: 6px 0 20px;
+}
+
+[data-skin="v2"] .v2-set-eyebrow {
+  font-family: var(--fm);
+  font-size: var(--set-label);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* Storage-pressure note — quiet, appears only when the device is near quota.
+   No horizontal padding of its own (RULE 1: .v2-content owns the gutter). */
+[data-skin="v2"] .v2-set-storage-note {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--forest) 7%, transparent);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 18px;
+}
+
+/* Collapsible category header (categories with >1 row). Inherits the eyebrow
+   type; adds a full-width tap target + a caret that flips when open. The
+   adjacent .v2-group is hidden until the header is opened. */
+[data-skin="v2"] .v2-set-eyebrow.tap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  padding: 8px 2px;
+  margin-bottom: 8px;
+  /* These headers are interactive (tap to expand), so they read as real section
+     headers — bigger + brighter than the old 9.5px/muted eyebrow, which was nearly
+     invisible on-device and dwarfed by the 15px rows below. */
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-set-caret {
+  color: var(--muted);
+  transition: transform .2s ease;
+}
+[data-skin="v2"] .v2-set-eyebrow.tap.open .v2-set-caret { transform: rotate(180deg); }
+[data-skin="v2"] .v2-set-eyebrow.tap:not(.open) + .v2-group { display: none; }
+
+/* Group card — design's .group. */
+[data-skin="v2"] .v2-group {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 2px 16px;
+  margin-bottom: 20px;
+}
+
+/* Row — design's .srow. */
+[data-skin="v2"] .v2-srow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--hair);
+  width: 100%;
+  background: none;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+[data-skin="v2"] .v2-srow:first-child {
+  border-top: none;
+}
+[data-skin="v2"] .v2-srow.tap {
+  cursor: pointer;
+  transition: opacity .15s;
+}
+[data-skin="v2"] .v2-srow.tap:active {
+  opacity: .55;
+}
+[data-skin="v2"] .v2-srow.stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+[data-skin="v2"] .v2-srow-tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+[data-skin="v2"] .v2-srow-l {
+  font-family: var(--fb);
+  font-size: var(--set-body);
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-srow-sub {
+  font-family: var(--fb);
+  font-size: var(--set-meta);
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 5px;
+  max-width: 30ch;
+}
+[data-skin="v2"] .v2-srow-sub.warn {
+  color: var(--clay);
+}
+/* Right-hand value sits at the same size as the row label so each row reads as
+   one line; the muted colour + meta font carry the hierarchy, not the size. */
+[data-skin="v2"] .v2-srow-r {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--fm);
+  font-size: var(--set-body);
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-srow-r svg {
+  width: 14px;
+  height: 14px;
+  color: var(--faint);
+}
+
+/* Inline value inputs. */
+[data-skin="v2"] .v2-srow-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  outline: none;
+  font-family: var(--fb);
+  font-size: var(--set-body);
+  color: var(--ink);
+  text-align: right;
+  max-width: 170px;
+  padding: 2px 0;
+}
+[data-skin="v2"] .v2-srow-input:focus {
+  border-bottom-color: var(--forest);
+}
+[data-skin="v2"] .v2-srow-input::placeholder {
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-srow-input.italic {
+  font-style: italic;
+}
+[data-skin="v2"] .v2-srow-input.num {
+  max-width: 64px;
+}
+[data-skin="v2"] .v2-srow-input.time {
+  max-width: 110px;
+  text-align: center;
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  padding: 7px 9px;
+  color-scheme: dark;
+}
+[data-skin="v2"][data-tod="day"] .v2-srow-input.time {
+  color-scheme: light;
+}
+
+[data-skin="v2"] .v2-srow-select {
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  color: var(--ink);
+  font-family: var(--fm);
+  font-size: var(--set-meta);
+  padding: 7px 9px;
+}
+
+[data-skin="v2"] .v2-srow-clear {
+  font-family: var(--fm);
+  font-size: var(--set-label);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 7px 11px;
+  cursor: pointer;
+}
+
+/* Toggle — design's .toggle. */
+[data-skin="v2"] .v2-toggle {
+  width: 46px;
+  height: 27px;
+  border-radius: 14px;
+  background: var(--line);
+  position: relative;
+  flex: 0 0 auto;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+[data-skin="v2"] .v2-toggle.on {
+  background: var(--forest);
+}
+[data-skin="v2"] .v2-toggle .k {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 21px;
+  height: 21px;
+  border-radius: 11px;
+  background: #fff;
+  transition: left .18s;
+}
+[data-skin="v2"] .v2-toggle.on .k {
+  left: 22px;
+}
+
+/* Text-size picker — design's .tsize. The three buttons deliberately render at
+   their own sizes (a live S / M / L preview), so they are the one intentional
+   exception to the settings type scale above. */
+[data-skin="v2"] .v2-tsize {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--hair);
+  border-radius: 11px;
+  padding: 2px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-tsize button {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: var(--fb);
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 4px 8px;
+  line-height: 1;
+}
+[data-skin="v2"] .v2-tsize button:nth-child(1) { font-size: 12px; }
+[data-skin="v2"] .v2-tsize button:nth-child(2) { font-size: 14px; }
+[data-skin="v2"] .v2-tsize button:nth-child(3) { font-size: 16px; }
+[data-skin="v2"] .v2-tsize button.on {
+  background: var(--cardHi);
+  color: var(--ink);
+}
+
+/* Full / Reflect segmented control. */
+[data-skin="v2"] .v2-seg {
+  display: flex;
+  gap: 2px;
+  background: var(--hair);
+  border-radius: 11px;
+  padding: 2px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-seg button {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: var(--fm);
+  font-size: var(--set-meta);
+  letter-spacing: .06em;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+[data-skin="v2"] .v2-seg button.on {
+  background: var(--cardHi);
+  color: var(--ink);
+}
+
+/* Letter-time chips. */
+[data-skin="v2"] .v2-chiprow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-chip {
+  font-family: var(--fm);
+  font-size: var(--set-meta);
+  letter-spacing: .04em;
+  color: var(--soft);
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-chip.on {
+  background: var(--forest);
+  color: var(--screen);
+  border-color: var(--forest);
+}
+
+/* Sleep window inline editor. */
+[data-skin="v2"] .v2-sleeprow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-skin="v2"] .v2-sleeparrow {
+  font-family: var(--fb);
+  color: var(--faint);
+}
+
+/* Theme swatches. */
+[data-skin="v2"] .v2-set-themes {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+/* Theme picker — each chip is a tiny live preview of the theme it sets:
+   the screen background, a line of "text", and the accent dot. */
+[data-skin="v2"] .v2-set-theme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+[data-skin="v2"] .v2-set-theme:active { transform: scale(.95); }
+[data-skin="v2"] .v2-set-swatch {
+  display: block;
+  position: relative;
+  width: 46px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--hair);
+  overflow: hidden;
+  transition: box-shadow .15s ease;
+}
+[data-skin="v2"] .v2-set-theme.on .v2-set-swatch {
+  box-shadow: 0 0 0 2px var(--screen), 0 0 0 4px var(--forest);
+}
+[data-skin="v2"] .v2-set-theme-lbl {
+  font-family: var(--fm);
+  font-size: var(--set-label);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-set-theme.on .v2-set-theme-lbl { color: var(--forest); }
+[data-skin="v2"] .v2-set-swatch::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 11px;
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+}
+[data-skin="v2"] .v2-set-swatch::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+[data-skin="v2"] .v2-set-swatch.nightfall { background: #0E120D; }
+[data-skin="v2"] .v2-set-swatch.nightfall::before { background: rgba(241, 236, 223, 0.5); }
+[data-skin="v2"] .v2-set-swatch.nightfall::after  { background: #9DBE82; }
+[data-skin="v2"] .v2-set-swatch.dusk { background: #1A1310; }
+[data-skin="v2"] .v2-set-swatch.dusk::before { background: rgba(244, 232, 218, 0.5); }
+[data-skin="v2"] .v2-set-swatch.dusk::after  { background: #C2A86A; }
+[data-skin="v2"] .v2-set-swatch.day { background: #ECE4D4; }
+[data-skin="v2"] .v2-set-swatch.day::before { background: rgba(26, 26, 26, 0.4); }
+[data-skin="v2"] .v2-set-swatch.day::after  { background: #3F5B39; }
+
+[data-skin="v2"] .v2-set-classic {
+  display: block;
+  margin: 4px auto 0;
+  font-family: var(--fm);
+  font-size: var(--set-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-set-classic:hover {
+  color: var(--muted);
+}
+
+/* Stepper — Water glasses (− n +). */
+[data-skin="v2"] .v2-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2px;
+}
+[data-skin="v2"] .v2-stepper button {
+  width: 30px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--soft);
+  font-family: var(--fm);
+  font-size: var(--set-body);
+  border-radius: 15px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-stepper button:active {
+  background: var(--cardHi);
+}
+[data-skin="v2"] .v2-stepper span {
+  min-width: 22px;
+  text-align: center;
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: var(--set-body);
+  color: var(--ink);
+}

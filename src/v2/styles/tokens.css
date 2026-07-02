@@ -1,0 +1,132 @@
+/* Ori v2 — design tokens
+ * Extracted verbatim from mockups/Ori v1 Build (standalone).html (lines 169-193 + 712-725).
+ * All variables are scoped under [data-skin="v2"] so v1 is never touched.
+ * Theme attribute data-tod sits on the same root element. */
+
+/* Native type. No webfonts: ui-serif resolves to New York on iOS/macOS
+ * (Apple's editorial serif — the Books/News face), system-ui to SF Pro.
+ * Elsewhere the stacks fall to Iowan Old Style / Georgia, so nothing
+ * downloads and nothing flashes. */
+
+[data-skin="v2"] {
+  /* Nightfall — default theme. */
+  --bg: #0A0D08;            /* outside the device */
+  --screen: #0E120D;        /* night sky screen */
+  --card: #181D14;
+  --cardHi: #1F261A;
+  --ink: #F1ECDF;
+  --soft: #D6D1C2;
+  --muted: #8B8D7E;
+  --faint: #585C4E;
+  --hair: rgba(255, 255, 255, 0.06);
+  --line: rgba(255, 255, 255, 0.11);
+  --sage: #A8C58B;          /* up / positive */
+  --amber: #CBA85B;         /* down */
+  --clay: #C76C42;
+  --forest: #9DBE82;        /* accent — rings, links */
+  --forest-deep: #2E4326;   /* mic / solid */
+  --forest-q: rgba(157, 190, 130, 0.15);
+  --fresh: #1E2C18;
+  --freshInk: #EFEADC;
+  --surround: #0A0D08;
+
+  /* Glass widget surfaces — a translucent card tint, a top-down sheen, a
+     bright edge and a soft lift turn the flat panels into glossy boxes.
+     Defined per theme so the gloss reads on nightfall, dusk and day. */
+  --glass-bg: rgba(26, 31, 22, 0.62);
+  --glass-sheen: linear-gradient(168deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 48%);
+  --glass-edge: rgba(255, 255, 255, 0.13);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.34);
+  --glass-blur: blur(14px) saturate(1.1);
+
+  /* Font stacks — Apple-native first (New York / SF Pro). */
+  --fd: ui-serif, 'New York', 'Iowan Old Style', Georgia, serif;
+  --fb: ui-serif, 'New York', 'Iowan Old Style', Georgia, serif;
+  --fr: ui-serif, 'New York', 'Iowan Old Style', Georgia, serif;
+  --fm: -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
+
+  /* Text size scale — read by surfaces that scale body copy. */
+  --read-scale: 1.0;
+
+  /* ── Container spacing — the LOCKED layout contract ──────────────────
+     One horizontal page gutter and one bottom inset, owned ONLY by
+     .v2-content (shell.css). Every surface — base tab AND drill-down
+     overlay — inherits this single frame; no surface declares its own
+     page gutter again. This is what keeps the app aligned edge-to-edge
+     and stops the "lean / double-gutter" drift. See docs/LAYOUT_CONTRACT.md. */
+  --v2-gutter: 24px;        /* the one horizontal page gutter (each side) */
+  --v2-pad-top: 12px;       /* default content top padding */
+  --v2-pad-bottom: 26px;    /* content bottom, before the safe area is added */
+  --v2-gap: 16px;           /* default vertical rhythm between page blocks */
+  --v2-bottom-safe: calc(env(safe-area-inset-bottom, 12px) + var(--v2-pad-bottom));
+  --v2-tabbar-clear: calc(env(safe-area-inset-bottom, 0px) + 92px);
+
+  /* v1-name aliases so v1's TrendChartFullV5 palette (V5_PAL uses
+     var(--fg)/var(--sf)/var(--ln)/var(--mt)) resolves correctly when
+     the chart is rendered inside a [data-skin="v2"] subtree. v1 still
+     sets these inline on its own root, so v1's behaviour is unchanged. */
+  --fg: var(--ink);
+  --sf: var(--card);
+  --ln: var(--line);
+  --mt: var(--muted);
+}
+
+[data-skin="v2"][data-tod="dusk"] {
+  --surround: #0E0907;
+  --screen: #1A1310;
+  --card: #241A13;
+  --cardHi: #2C2018;
+  --ink: #F4E8DA;
+  --soft: #DCC9B8;
+  --muted: #9C8B7B;
+  --faint: #6C5E50;
+  --hair: rgba(255, 238, 222, 0.06);
+  --line: rgba(255, 238, 222, 0.11);
+  --sage: #BCC382;
+  --amber: #DBA956;
+  --clay: #D67C48;
+  --forest: #C2A86A;
+  --forest-deep: #43361F;
+  --forest-q: rgba(194, 168, 106, 0.17);
+  --fresh: #2A2015;
+  --freshInk: #F4E8DA;
+  --glass-bg: rgba(40, 30, 22, 0.60);
+  --glass-sheen: linear-gradient(168deg, rgba(255, 242, 228, 0.07), rgba(255, 242, 228, 0) 48%);
+  --glass-edge: rgba(255, 238, 222, 0.14);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.34);
+  --glass-blur: blur(14px) saturate(1.1);
+}
+
+[data-skin="v2"][data-tod="day"] {
+  --surround: #D2CABA;
+  --screen: #ECE4D4;
+  --card: #F3ECDD;
+  --cardHi: #F8F2E6;
+  --ink: #1A1A1A;
+  --soft: #2B2824;
+  --muted: #6F695E;
+  --faint: #B8B09D;
+  --hair: rgba(26, 26, 26, 0.07);
+  --line: rgba(26, 26, 26, 0.12);
+  --sage: #5F7F5F;
+  --amber: #A8823C;
+  --clay: #9A4E2E;
+  --forest: #3F5B39;
+  --forest-deep: #3F5B39;
+  --forest-q: rgba(63, 91, 57, 0.16);
+  --fresh: #ECEFE3;
+  --freshInk: #26331C;
+  --glass-bg: rgba(247, 241, 228, 0.66);
+  --glass-sheen: linear-gradient(168deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 48%);
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-shadow: 0 10px 28px rgba(80, 68, 42, 0.14);
+  --glass-blur: blur(14px) saturate(1.05);
+}
+
+/* Text-size setting — orthogonal to theme (Settings → Appearance). */
+[data-skin="v2"][data-rs="large"] {
+  --read-scale: 1.15;
+}
+[data-skin="v2"][data-rs="larger"] {
+  --read-scale: 1.32;
+}

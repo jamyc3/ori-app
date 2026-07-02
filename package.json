@@ -1,0 +1,40 @@
+{
+  "name": "ori-app",
+  "private": true,
+  "version": "0.6.0",
+  "type": "module",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "audit": "node scripts/audit-honesty.mjs && node scripts/eval-letter-v2.mjs && node scripts/eval-letter-crisis-gate.mjs && node scripts/eval-inbox-alerts.mjs && node scripts/eval-acknowledgment.mjs && node scripts/eval-entry-date.mjs && node scripts/eval-crisis-resources.mjs && node scripts/eval-voice-confidence.mjs && node scripts/eval-voice-vocabulary.mjs && node scripts/eval-backfill-runner.mjs && node scripts/check-ack-reflect-gate.mjs",
+    "build": "npm run audit && node scripts/check-public-assets.mjs && node scripts/gen-crisis-json.mjs && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/browser": "^8.0.3",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/local-notifications": "^8.2.0",
+    "@capacitor/share": "^8.0.1",
+    "@ebarooni/capacitor-calendar": "^8.0.1",
+    "@flomentumsolutions/capacitor-health-extended": "^0.8.3",
+    "firebase": "^12.15.0",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "vite": "^8.0.4"
+  }
+}

@@ -1,0 +1,324 @@
+/* Ori v2 — import promo + "read your last 30 days" backfill screens.
+ * Full-viewport sheets, scoped under [data-skin="v2"]. They reuse the global
+ * .v2-pill-btn; everything else lives here. */
+
+[data-skin="v2"] .v2-promo,
+[data-skin="v2"] .v2-bf {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14vh 28px calc(env(safe-area-inset-bottom, 16px) + 32px);
+}
+
+/* ── Backfill text (offer / running / done screens) ─────────────────── */
+[data-skin="v2"] .v2-bf-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--sage, var(--forest));
+  margin-bottom: 12px;
+}
+[data-skin="v2"] .v2-bf-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(30px * var(--read-scale));
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+[data-skin="v2"] .v2-bf-lede {
+  font-family: var(--fr);
+  font-size: calc(16px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--soft);
+  margin: 0 0 20px;
+  max-width: 34ch;
+}
+[data-skin="v2"] .v2-bf-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+[data-skin="v2"] .v2-bf-later {
+  background: none;
+  border: none;
+  padding: 6px 2px;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* ── Promo — Spotify-Wrapped-style reveal ───────────────────────────── */
+/* Full-bleed gradient card; overrides the shared flex-start sheet above. */
+[data-skin="v2"] .v2-promo.wrapped {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  align-items: stretch;
+  background: #0A0D08;
+  color: #FFF7E6;
+}
+
+/* drifting multi-stop gradient — Ori's forest/sage/amber/clay, pushed warm */
+[data-skin="v2"] .v2-promo-field {
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  background:
+    radial-gradient(110% 80% at 16% 6%, rgba(168, 197, 139, .95), transparent 55%),
+    radial-gradient(110% 95% at 90% 20%, rgba(203, 168, 91, .95), transparent 58%),
+    radial-gradient(140% 120% at 72% 102%, rgba(199, 108, 66, .92), transparent 60%),
+    radial-gradient(120% 120% at 4% 96%, rgba(61, 91, 57, .98), transparent 62%),
+    linear-gradient(158deg, #16331e 0%, #2d1c0d 100%);
+  background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+  filter: saturate(1.16);
+  animation: promoDrift 20s ease-in-out infinite;
+}
+@keyframes promoDrift {
+  0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 100%, 0 0; }
+  50%      { background-position: 28% 18%, 72% 26%, 42% 78%, 22% 82%, 0 0; }
+}
+
+/* fixed scrim: darkens top & bottom for reliable text contrast, leaves the
+   middle luminous behind the hero number (Wrapped's bright-focal depth) */
+[data-skin="v2"] .v2-promo.wrapped::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 6, .34) 0%,
+    rgba(8, 11, 6, 0) 24%,
+    rgba(8, 11, 6, 0) 58%,
+    rgba(8, 11, 6, .42) 86%,
+    rgba(8, 11, 6, .64) 100%
+  );
+}
+
+/* faint film grain so the gradient reads premium rather than flat */
+[data-skin="v2"] .v2-promo-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+[data-skin="v2"] .v2-promo-inner {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: calc(env(safe-area-inset-top, 0px) + 7vh) 30px calc(env(safe-area-inset-bottom, 16px) + 26px);
+}
+
+[data-skin="v2"] .v2-promo-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255, 247, 230, .9);
+  padding: 7px 14px 7px 12px;
+  border: 1px solid rgba(255, 247, 230, .3);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: promoUp .55s both;
+}
+[data-skin="v2"] .v2-promo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFF7E6;
+  box-shadow: 0 0 10px rgba(255, 247, 230, .9);
+}
+
+/* hero + actions both carry margin:auto so the cluster centres, CTA pins low */
+[data-skin="v2"] .v2-promo-hero {
+  margin-top: auto;
+}
+[data-skin="v2"] .v2-promo-bignum {
+  font-family: var(--fd);
+  font-weight: 600;
+  font-size: clamp(120px, 42vw, 184px);
+  line-height: .94;
+  letter-spacing: -0.02em;
+  width: max-content;
+  color: #FFF7E6;
+  background: linear-gradient(176deg, #FFFDF6 6%, #FCE6B6 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Pad the paint box so the serif glyph ink (the round 0 especially, under a
+     tight line-height + negative tracking) is fully covered by the gradient —
+     background-clip:text only paints within the padding box, so without this
+     the glyph's overshoot renders transparent and looks sliced. The LEFT needs
+     the same room as the right: a serif "3" has real left side-bearing ink, and
+     under negative tracking + a -0.06em left margin a 0.02em left pad left it
+     starved, slicing the leftmost glyph on WebKit/iOS. Match left pad to the
+     right (0.14em); negative margins claw the padding back so the optical
+     position is unchanged. */
+  padding: 0.06em 0.14em 0.08em 0.14em;
+  margin: -0.06em 0 -0.08em -0.18em;
+  filter: drop-shadow(0 8px 40px rgba(0, 0, 0, .32));
+  animation: promoPop .7s .04s both cubic-bezier(.2, .9, .2, 1.2);
+}
+[data-skin="v2"] .v2-promo-bigword {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: clamp(29px, 8.4vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #FFF7E6;
+  margin-top: 8px;
+  animation: promoUp .55s .16s both;
+}
+
+[data-skin="v2"] .v2-promo-sub {
+  font-family: var(--fr);
+  font-size: calc(15.5px * var(--read-scale));
+  line-height: 1.5;
+  color: rgba(255, 247, 230, .85);
+  max-width: 30ch;
+  margin: 20px 0 0;
+  animation: promoUp .55s .26s both;
+}
+
+[data-skin="v2"] .v2-promo-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 26px;
+  animation: promoUp .55s .34s both;
+}
+[data-skin="v2"] .v2-promo-stat {
+  display: flex;
+  flex-direction: column;
+}
+[data-skin="v2"] .v2-promo-stat b {
+  font-family: var(--fd);
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1;
+  color: #FFF7E6;
+}
+[data-skin="v2"] .v2-promo-stat b.glyph {
+  font-weight: 400;
+}
+[data-skin="v2"] .v2-promo-stat span {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: rgba(255, 247, 230, .68);
+  margin-top: 8px;
+}
+
+[data-skin="v2"] .v2-promo.wrapped .v2-promo-actions {
+  margin-top: auto;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  animation: promoUp .55s .44s both;
+}
+[data-skin="v2"] .v2-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 17px 22px;
+  border: none;
+  border-radius: 999px;
+  background: #FFF7E6;
+  color: #1A1A1A;
+  font-family: var(--fr);
+  font-size: calc(16px * var(--read-scale));
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .3);
+  transition: transform .15s ease;
+}
+[data-skin="v2"] .v2-promo-cta:active {
+  transform: scale(.97);
+}
+[data-skin="v2"] .v2-promo.wrapped .v2-promo-later {
+  align-self: center;
+  background: none;
+  border: none;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255, 247, 230, .6);
+  padding: 5px;
+  cursor: pointer;
+}
+
+@keyframes promoUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes promoPop {
+  from { opacity: 0; transform: translateY(20px) scale(.92); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="v2"] .v2-promo-field { animation: none; }
+  [data-skin="v2"] .v2-promo-kicker,
+  [data-skin="v2"] .v2-promo-bignum,
+  [data-skin="v2"] .v2-promo-bigword,
+  [data-skin="v2"] .v2-promo-sub,
+  [data-skin="v2"] .v2-promo-stats,
+  [data-skin="v2"] .v2-promo.wrapped .v2-promo-actions { animation: none; }
+}
+
+/* ── Backfill progress ──────────────────────────────────────────────── */
+[data-skin="v2"] .v2-bf-bar {
+  width: 100%;
+  max-width: 320px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--hair);
+  overflow: hidden;
+  margin: 6px 0 10px;
+}
+[data-skin="v2"] .v2-bf-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--forest);
+  transition: width .4s ease;
+}
+[data-skin="v2"] .v2-bf-count {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 16px;
+}

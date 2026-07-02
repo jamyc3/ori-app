@@ -1,0 +1,345 @@
+/* Ori v2 — Letter surface
+ * Backrow · clay dateline · italic "Dear you," salutation · parts-peek
+ * ribbon · body with tappable inline part-refs · helpline footer.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-letter {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 18px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+  /* Column so the helpline can sit at the bottom on short content (the pending
+   * / failed states) while still scrolling naturally under a long letter. */
+  display: flex;
+  flex-direction: column;
+}
+
+[data-skin="v2"] .v2-letter-dateline {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(14px * var(--read-scale));
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+[data-skin="v2"] .v2-letter-salutation {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 22px;
+  letter-spacing: -0.005em;
+}
+
+[data-skin="v2"] .v2-lpp-avs {
+  display: flex;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-lpp-av {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--card);
+  margin-left: -8px;
+  cursor: pointer;
+  transition: transform .15s;
+  background: var(--forest);
+  position: relative;
+}
+[data-skin="v2"] .v2-lpp-av:first-child { margin-left: 0; }
+[data-skin="v2"] .v2-lpp-av:active { transform: scale(.88); }
+[data-skin="v2"] .v2-lpp-tx {
+  flex: 1;
+  font-family: var(--fb);
+  font-size: 13px;
+  color: var(--soft);
+  line-height: 1.3;
+}
+[data-skin="v2"] .v2-lpp-go {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--forest);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  flex: 0 0 auto;
+  padding: 6px 0;
+}
+[data-skin="v2"] .v2-lpp-go:active { opacity: .6; }
+
+[data-skin="v2"] .v2-letter-body {
+  font-family: var(--fr);
+  font-style: normal;
+  font-weight: 400;
+  font-size: calc(20.5px * var(--read-scale));
+  line-height: 1.74;
+  letter-spacing: .003em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+[data-skin="v2"] .v2-letter-body p {
+  margin: 0 0 18px;
+}
+
+/* Tappable inline part references — design's .part-ref. */
+[data-skin="v2"] .v2-part-ref {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--forest);
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+}
+[data-skin="v2"] .v2-part-ref:active { opacity: .6; }
+
+[data-skin="v2"] .v2-letter-signature {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(16px * var(--read-scale));
+  color: var(--muted);
+  margin: 10px 0 28px;
+}
+
+/* Quiet closing footer — parts that moved through the day, then one honest
+ * source line. Borderless: a letter's postscript, not an app widget. */
+[data-skin="v2"] .v2-letter-foot-parts {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+  margin-bottom: 14px;
+}
+[data-skin="v2"] .v2-letter-source {
+  /* Flow as text, NOT flex. As a flex row the info chip was a sibling item that
+   * stayed vertically centred against the whole block — when the caption wrapped
+   * to two lines it stranded the "i" beside the FIRST line, far from where the
+   * sentence ends. Inline flow keeps the chip tucked right after the final word. */
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(13px * var(--read-scale));
+  line-height: 1.5;
+  color: var(--muted);
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-letter-foot-parts + .v2-letter-source {
+  border-top: none;
+  padding-top: 0;
+}
+[data-skin="v2"] .v2-letter-source .v2-prov-chip {
+  margin-left: 7px;
+  vertical-align: -2px; /* drop the circle onto the text baseline */
+  opacity: .6;
+}
+
+/* Header row: back on the left, the keepsake share glyph tucked top-right. */
+[data-skin="v2"] .v2-letter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* "Keep this letter" — just a subtle share glyph in the top-right corner.
+   Quiet by design: low-contrast until touched, never a CTA. */
+[data-skin="v2"] .v2-letter-share-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-right: -6px;            /* optically align the glyph to the text edge */
+  border: none;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s ease, background .15s ease, opacity .15s ease;
+}
+[data-skin="v2"] .v2-letter-share-ic:active { color: var(--forest); background: var(--card); }
+[data-skin="v2"] .v2-letter-share-ic:disabled { opacity: .5; }
+@media (hover: hover) {
+  [data-skin="v2"] .v2-letter-share-ic:hover { color: var(--forest); }
+}
+
+/* Keepsake-card preview — see the card on screen before saving/sharing it. */
+[data-skin="v2"] .v2-card-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  background: rgba(30, 26, 20, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: v2-card-fade .18s ease;
+}
+@keyframes v2-card-fade { from { opacity: 0; } to { opacity: 1; } }
+[data-skin="v2"] .v2-card-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: min(86vw, 360px);
+  max-height: 90vh;            /* fallback */
+  max-height: 90dvh;           /* dvh tracks the iOS toolbar so the action buttons never hide under it */
+}
+/* Tall letters scroll INSIDE this box at a readable width rather than being
+   shrunk to fit — so a long letter never spills off-screen, and the action
+   buttons below stay pinned and reachable. Short letters don't scroll. */
+[data-skin="v2"] .v2-card-scroll {
+  width: 100%;
+  max-height: 74vh;            /* fallback */
+  max-height: 74dvh;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+[data-skin="v2"] .v2-card-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+[data-skin="v2"] .v2-card-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;             /* buttons never get squeezed off-screen */
+}
+[data-skin="v2"] .v2-card-btn {
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-family: var(--fm);
+  font-size: calc(15px * var(--read-scale));
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* The overlay sits on a fixed dark scrim in EVERY theme, so these colors are
+   constants — theme vars (--ink/--paper) invert at nightfall and made the
+   label vanish (light text on the light button). */
+[data-skin="v2"] .v2-card-btn.primary {
+  border: none;
+  background: #f4ede0;
+  color: #2b2824;
+}
+[data-skin="v2"] .v2-card-btn.primary:active { background: #e8dec9; }
+[data-skin="v2"] .v2-card-btn.ghost {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
+  color: #fff;
+}
+
+[data-skin="v2"] .v2-letter-pending {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(18px * var(--read-scale));
+  color: var(--muted);
+  text-align: center;
+  padding: 60px 12px;
+  line-height: 1.55;
+  max-width: 32ch;
+  margin: 0 auto;
+}
+/* Each rotated waiting line fades in (the React key change replays this). */
+[data-skin="v2"] .v2-letter-waiting {
+  animation: v2-letter-fade 0.9s ease;
+}
+@keyframes v2-letter-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+/* The failure note sits closer to its Retry button than the tall pending pad. */
+[data-skin="v2"] .v2-letter-failmsg {
+  padding: 40px 12px 4px;
+}
+
+/* Long-letter clamp + provenance chips — design's .clamped / .prov-chips. */
+[data-skin="v2"] .v2-letter-body.clamped {
+  max-height: 520px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 76%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 76%, transparent 100%);
+}
+[data-skin="v2"] .v2-letter-more {
+  display: block;
+  margin: 2px auto 6px;
+  padding: 11px 22px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border-radius: 24px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-prov-div {
+  border-top: 1px dashed var(--line);
+  margin: 10px 0 16px;
+}
+[data-skin="v2"] .v2-prov-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+[data-skin="v2"] .v2-chip-src {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .05em;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  padding: 8px 13px;
+}
+
+/* "Read it now" — early-write action under the pending copy. */
+[data-skin="v2"] .v2-letter-now {
+  display: block;
+  margin: 18px auto 6px;
+  padding: 11px 24px;
+  border: 1px solid var(--forest-q);
+  background: var(--forest-q);
+  color: var(--forest);
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+[data-skin="v2"] .v2-letter-now:active {
+  transform: scale(.96);
+}
+/* "Read again" sits quietly under the letter's source line; when new
+   reflections are waiting it fills in to read as the clear next action. */
+[data-skin="v2"] .v2-letter-readagain {
+  margin-top: 22px;
+}
+[data-skin="v2"] .v2-letter-readagain.has-new {
+  background: var(--forest);
+  color: var(--paper, #fff);
+  border-color: var(--forest);
+}

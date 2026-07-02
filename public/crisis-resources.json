@@ -1,0 +1,126 @@
+{
+  "version": "2026-06-13",
+  "countries": {
+    "US": {
+      "name": "United States",
+      "lines": [
+        {
+          "label": "Call or text 988",
+          "tel": "988",
+          "sms": "988",
+          "note": "Suicide & Crisis Lifeline",
+          "hours": "24/7"
+        },
+        {
+          "label": "Text HOME to 741741",
+          "sms": "741741",
+          "note": "Crisis Text Line",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "CA": {
+      "name": "Canada",
+      "lines": [
+        {
+          "label": "Call or text 988",
+          "tel": "988",
+          "sms": "988",
+          "note": "Suicide Crisis Helpline",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "GB": {
+      "name": "United Kingdom",
+      "lines": [
+        {
+          "label": "Call 116 123",
+          "tel": "116123",
+          "note": "Samaritans (free)",
+          "hours": "24/7"
+        },
+        {
+          "label": "Text SHOUT to 85258",
+          "sms": "85258",
+          "note": "Shout",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "IE": {
+      "name": "Ireland",
+      "lines": [
+        {
+          "label": "Call 116 123",
+          "tel": "116123",
+          "note": "Samaritans (free)",
+          "hours": "24/7"
+        },
+        {
+          "label": "Text HELLO to 50808",
+          "sms": "50808",
+          "note": "Text About It",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "AU": {
+      "name": "Australia",
+      "lines": [
+        {
+          "label": "Call 13 11 14",
+          "tel": "131114",
+          "note": "Lifeline",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "lines": [
+        {
+          "label": "Call or text 1737",
+          "tel": "1737",
+          "sms": "1737",
+          "note": "Need to talk?",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "DE": {
+      "name": "Germany",
+      "lines": [
+        {
+          "label": "Call 0800 111 0 111",
+          "tel": "08001110111",
+          "note": "TelefonSeelsorge",
+          "hours": "24/7"
+        },
+        {
+          "label": "or 116 123",
+          "tel": "116123",
+          "note": "TelefonSeelsorge",
+          "hours": "24/7"
+        }
+      ]
+    },
+    "IN": {
+      "name": "India",
+      "lines": [
+        {
+          "label": "Call 14416",
+          "tel": "14416",
+          "note": "Tele-MANAS (govt)",
+          "hours": "24/7"
+        },
+        {
+          "label": "Call +91 98204 66726",
+          "tel": "+919820466726",
+          "note": "AASRA",
+          "hours": "24/7"
+        }
+      ]
+    }
+  }
+}

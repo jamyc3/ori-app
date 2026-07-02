@@ -1,0 +1,258 @@
+/* Ori v2 — Ring detail (drill-down)
+ * Opens when a ring on Today is tapped. Big number + 7-day bars + a brief
+ * "what's underneath" explainer + source line per the honesty contract.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-ring {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+}
+
+[data-skin="v2"] .v2-ring-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 2px;
+}
+[data-skin="v2"] .v2-ring-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+[data-skin="v2"] .v2-ring-word {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: calc(15px * var(--read-scale));
+  color: var(--forest);
+  margin: 0 0 14px;
+}
+[data-skin="v2"] .v2-ring-word.amber { color: var(--amber); }
+[data-skin="v2"] .v2-ring-word.sage  { color: var(--sage); }
+
+[data-skin="v2"] .v2-ring-big-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+[data-skin="v2"] .v2-ring-big {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(40px * var(--read-scale));
+  line-height: 1;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-ring-big.dash {
+  font-size: calc(26px * var(--read-scale));
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-ring-big-suffix {
+  font-family: var(--fm);
+  font-size: 14px;
+  letter-spacing: .04em;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-ring-big-rel {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--muted);
+  margin-left: auto;
+  text-align: right;
+  max-width: 46%;
+  line-height: 1.32;
+}
+
+[data-skin="v2"] .v2-ring-chart {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 12px 12px 8px;
+  margin-bottom: 12px;
+}
+[data-skin="v2"] .v2-ring-chart-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+[data-skin="v2"] .v2-ring-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 96px;
+  gap: 5px;
+}
+[data-skin="v2"] .v2-ring-bar {
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 3px 3px 0 0;
+  background: var(--forest);
+  opacity: .55;
+}
+[data-skin="v2"] .v2-ring-bar.empty {
+  background: var(--line);
+  opacity: 1;
+}
+[data-skin="v2"] .v2-ring-bar.sage  { background: var(--sage);  opacity: .85; }
+[data-skin="v2"] .v2-ring-bar.amber { background: var(--amber); opacity: .8; }
+[data-skin="v2"] .v2-ring-bar.today { outline: 1px solid var(--ink); outline-offset: 1px; opacity: 1; }
+[data-skin="v2"] .v2-ring-chart-row {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+  font-family: var(--fm);
+  font-size: 8px;
+  letter-spacing: .08em;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-ring-chart-row span {
+  flex: 1 1 0;
+  text-align: center;
+  min-width: 0;
+}
+
+[data-skin="v2"] .v2-ring-section-label {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 18px 0 12px;
+}
+[data-skin="v2"] .v2-ring-anchor {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+[data-skin="v2"] .v2-ring-anchor-name {
+  font-family: var(--fb);
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+[data-skin="v2"] .v2-ring-anchor-line {
+  font-family: var(--fb);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+[data-skin="v2"] .v2-ring-src {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .05em;
+  color: var(--faint);
+  text-align: center;
+  padding: 22px 0 6px;
+}
+
+/* Full-breakdown row — opens v1's BucketDetailModal verbatim. */
+[data-skin="v2"] .v2-ring-full {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  margin-top: 14px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 16px 18px;
+  cursor: pointer;
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  font-weight: 500;
+  color: var(--ink);
+  text-align: left;
+  transition: transform .15s, background .15s;
+}
+[data-skin="v2"] .v2-ring-full:active {
+  transform: scale(.99);
+  background: var(--cardHi);
+}
+[data-skin="v2"] .v2-ring-full span {
+  font-family: var(--fb);
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* Check-in nudge (Form detail only) — shown when you've journaled more recently
+   than your last check-in. Form moves on check-ins, so this turns a "stuck"
+   chart into one tap. Sage-tinted to match Form, gentle, never a guilt-nag. */
+[data-skin="v2"] .v2-ring-checkin {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  margin: 2px 0 4px;
+  background: var(--forest-q);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 14px 18px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform .15s, background .15s;
+}
+[data-skin="v2"] .v2-ring-checkin:active {
+  transform: scale(.99);
+  background: var(--cardHi);
+}
+[data-skin="v2"] .v2-ring-checkin-txt {
+  font-family: var(--fb);
+  font-size: calc(13px * var(--read-scale));
+  color: var(--ink);
+  line-height: 1.45;
+}
+[data-skin="v2"] .v2-ring-checkin-cta {
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .03em;
+  font-weight: 600;
+  color: var(--sage);
+}
+
+/* "What each part means" — the plain-language explainer entry, a forest-tinted
+   link-row that sits between the ring description and the data breakdown. */
+[data-skin="v2"] .v2-ring-how {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  width: 100%;
+  margin-top: 12px;
+  background: var(--forest-q);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  font-weight: 500;
+  color: var(--forest);
+  text-align: left;
+  transition: transform .15s, background .15s;
+}
+[data-skin="v2"] .v2-ring-how:active { transform: scale(.99); }
+[data-skin="v2"] .v2-ring-how span {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--muted);
+}

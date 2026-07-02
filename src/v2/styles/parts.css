@@ -1,0 +1,703 @@
+/* Ori v2 — Parts surfaces
+ * All-Parts list + Per-Part detail.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-parts,
+[data-skin="v2"] .v2-pd {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+}
+
+/* All-Parts list — heading + row stack. */
+[data-skin="v2"] .v2-parts-eyebrow {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 6px 0 12px;
+}
+[data-skin="v2"] .v2-parts-title {
+  font-family: var(--fd);
+  font-style: italic;
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+[data-skin="v2"] .v2-parts-lead {
+  font-family: var(--fr);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 22px;
+  text-wrap: pretty;
+}
+
+[data-skin="v2"] .v2-parts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+[data-skin="v2"] .v2-prow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  transition: transform .12s ease, border-color .15s ease;
+}
+[data-skin="v2"] .v2-prow:active {
+  transform: scale(.99);
+  border-color: var(--line);
+}
+[data-skin="v2"] .v2-prow-glyph {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--cardHi);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-prow-mid {
+  flex: 1;
+  min-width: 0;
+}
+[data-skin="v2"] .v2-prow-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-prow-name {
+  font-family: var(--fb);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+}
+[data-skin="v2"] .v2-prow-stage {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-prow-sub {
+  font-family: var(--fb);
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-skin="v2"] .v2-prow-bar {
+  height: 3px;
+  background: var(--line);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+[data-skin="v2"] .v2-prow-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  transition: width .3s ease;
+}
+[data-skin="v2"] .v2-prow-chev {
+  flex: 0 0 auto;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-parts-foot {
+  font-family: var(--fb);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--faint);
+  margin: 26px 0 0;
+  text-wrap: pretty;
+}
+
+/* Per-Part detail — top row (back + "n of m" when paging through a letter). */
+[data-skin="v2"] .v2-pd-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+[data-skin="v2"] .v2-pd-count {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding-bottom: 16px;            /* align baseline with the back row */
+  flex: 0 0 auto;
+}
+
+/* Bottom pager — Prev / dots / Next, only when this part is one of a letter's
+   set. Moving is in place; the back chevron above still returns to the letter. */
+[data-skin="v2"] .v2-pd-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-pd-pg-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 9px 14px;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transition: transform .12s ease, border-color .15s ease, opacity .15s ease;
+}
+[data-skin="v2"] .v2-pd-pg-btn svg { width: 16px; height: 16px; color: var(--muted); }
+[data-skin="v2"] .v2-pd-pg-btn:active { transform: scale(.96); border-color: var(--line); }
+[data-skin="v2"] .v2-pd-pg-btn:disabled { opacity: .32; cursor: default; }
+[data-skin="v2"] .v2-pd-pg-btn:disabled:active { transform: none; }
+[data-skin="v2"] .v2-pd-pg-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-pd-pg-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line);
+  transition: background .2s ease, transform .2s ease;
+}
+[data-skin="v2"] .v2-pd-pg-dots i.on {
+  background: var(--forest);
+  transform: scale(1.25);
+}
+
+/* Per-Part detail — hero + stat cards + holding + thank zone. */
+[data-skin="v2"] .v2-pd-hero {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin: 14px 0 22px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-pd-glyph {
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-pd-role {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-pd-role::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--forest);
+  display: inline-block;
+}
+[data-skin="v2"] .v2-pd-name {
+  font-family: var(--fd);
+  font-style: italic;
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 10px;
+  letter-spacing: -0.015em;
+}
+[data-skin="v2"] .v2-pd-desc {
+  font-family: var(--fb);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--soft);
+  margin: 0;
+}
+
+[data-skin="v2"] .v2-pd-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+[data-skin="v2"] .v2-pd-stat {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+[data-skin="v2"] .v2-pd-stat-label {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+[data-skin="v2"] .v2-pd-stage {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(28px * var(--read-scale));
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+[data-skin="v2"] .v2-pd-stage-sub {
+  font-family: var(--fb);
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+[data-skin="v2"] .v2-pd-stat-bar {
+  height: 4px;
+  background: var(--line);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+[data-skin="v2"] .v2-pd-stat-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  transition: width .3s ease;
+}
+[data-skin="v2"] .v2-pd-stat-line {
+  font-family: var(--fb);
+  font-size: 14px;
+  color: var(--soft);
+  line-height: 1.5;
+}
+
+/* "What is this part?" — quiet expander above the holding card. Pulled, never
+   pushed: a bare text button, no card chrome until opened. */
+[data-skin="v2"] .v2-pd-whatis { margin-bottom: 18px; }
+[data-skin="v2"] .v2-pd-whatis-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-pd-whatis-caret { display: inline-block; margin-left: 5px; vertical-align: -1px; transition: transform .18s ease; }
+[data-skin="v2"] .v2-pd-whatis-caret.open { transform: rotate(180deg); }
+[data-skin="v2"] .v2-pd-whatis-body {
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+[data-skin="v2"] .v2-pd-holding {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 20px 22px;
+  margin-bottom: 22px;
+}
+[data-skin="v2"] .v2-pd-holding-label {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+[data-skin="v2"] .v2-pd-holding-text {
+  font-family: var(--fb);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-pd-holding-text em {
+  color: var(--sage);
+  font-style: italic;
+}
+
+[data-skin="v2"] .v2-pd-thank {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+[data-skin="v2"] .v2-pd-thank-tx {
+  flex: 1;
+  min-width: 220px;
+}
+[data-skin="v2"] .v2-pd-thank-h {
+  margin: 0 0 6px;
+  font-family: var(--fb);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-pd-thank-p {
+  margin: 0;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--soft);
+  opacity: .9;
+}
+/* Action row — Thank beside the voice doorway. The mic mirrors the
+ * journal's capture language: a forest-deep disc with the forest mic. */
+[data-skin="v2"] .v2-pd-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+/* Voice button — same language as the journal mic: a light disc with a
+ * clearly visible forest mic and a soft sage rim. (It used to be a forest
+ * mic on a dark-green disc — same colour on same colour, so it read as a
+ * blank green dot with no mic.) */
+[data-skin="v2"] .v2-pd-voice {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--forest) 34%, transparent);
+  background: var(--cardHi);
+  color: var(--forest);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--forest) 7%, transparent),
+    0 6px 16px color-mix(in srgb, var(--forest) 14%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+[data-skin="v2"] .v2-pd-voice svg { width: 22px; height: 22px; }
+[data-skin="v2"] .v2-pd-voice:active { transform: scale(.92); }
+
+[data-skin="v2"] .v2-pd-thank-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  cursor: pointer;
+  background: var(--forest);
+  color: var(--screen);
+  border-radius: 24px;
+  padding: 13px 24px;
+  font-family: var(--fm);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: background .2s, color .2s;
+  min-width: 150px;
+  justify-content: center;
+}
+[data-skin="v2"] .v2-pd-thank-btn.thanked {
+  background: transparent;
+  border: 1px solid var(--forest);
+  color: var(--forest);
+}
+
+/* ── Reflect zone (Phase 3) — the quiet "say a little" doorway + flow. ── */
+[data-skin="v2"] .v2-ack-doorway {
+  margin-top: 14px;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--forest) 30%, transparent);
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  color: var(--forest);
+  cursor: pointer;
+  transition: background .15s ease;
+}
+[data-skin="v2"] .v2-ack-doorway:active { background: color-mix(in srgb, var(--forest) 6%, transparent); }
+[data-skin="v2"] .v2-ack-zone {
+  margin-top: 14px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 18px;
+}
+[data-skin="v2"] .v2-ack-consent-lead,
+[data-skin="v2"] .v2-ack-label {
+  margin: 0 0 8px;
+  font-family: var(--fb);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--ink);
+  display: block;
+}
+[data-skin="v2"] .v2-ack-consent-body {
+  margin: 0 0 14px;
+  font-family: var(--fb);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-ack-text {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--screen);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 11px 13px;
+  font-family: var(--fb);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  resize: vertical;
+}
+[data-skin="v2"] .v2-ack-text:focus { outline: none; border-color: var(--forest); }
+/* One line: Reflect grows to fill, the mic icon and Cancel stay compact at the
+ * end. No wrap — keeps the controls a single thumb-height strip above the
+ * keyboard. (The consent screen reuses .v2-ack-actions with two text buttons;
+ * there neither is .primary, so they just sit side by side as before.) */
+[data-skin="v2"] .v2-ack-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+[data-skin="v2"] .v2-ack-btn {
+  flex: 0 0 auto;
+  border: 0;
+  cursor: pointer;
+  background: var(--forest);
+  color: var(--screen);
+  border-radius: 22px;
+  padding: 12px 18px;
+  font-family: var(--fm);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* The lead action stretches; everything else stays its natural width. */
+[data-skin="v2"] .v2-ack-btn.primary {
+  flex: 1 1 auto;
+  text-align: center;
+}
+[data-skin="v2"] .v2-ack-btn.ghost {
+  background: transparent;
+  border: 1px solid var(--hair);
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-ack-btn:disabled { opacity: .5; cursor: default; }
+
+/* Speak — a round mic icon button, not a word, so all three controls fit one
+ * line. Filled green while recording. 44px keeps a comfortable tap target. */
+[data-skin="v2"] .v2-ack-mic {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--hair);
+  color: var(--soft);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
+}
+[data-skin="v2"] .v2-ack-mic svg { width: 20px; height: 20px; }
+[data-skin="v2"] .v2-ack-mic:active { transform: scale(.92); }
+[data-skin="v2"] .v2-ack-mic:disabled { opacity: .5; cursor: default; }
+[data-skin="v2"] .v2-ack-mic.rec {
+  border-color: var(--forest);
+  color: var(--forest);
+  background: color-mix(in srgb, var(--forest) 12%, transparent);
+}
+[data-skin="v2"] .v2-ack-interim {
+  margin: 8px 0 0;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--soft);
+  opacity: .7;
+}
+[data-skin="v2"] .v2-ack-mirror {
+  margin: 0;
+  font-family: var(--fb);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-ack-mirror.soft { color: var(--soft); }
+[data-skin="v2"] .v2-ack-invite {
+  margin: 12px 0 0;
+  font-family: var(--fb);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--forest);
+  font-style: italic;
+}
+/* Support card — distress off-ramp. Calm, not alarming. */
+[data-skin="v2"] .v2-ack-support {
+  border-left: 3px solid var(--forest);
+  padding-left: 14px;
+}
+[data-skin="v2"] .v2-ack-support-lead {
+  margin: 0 0 10px;
+  font-family: var(--fb);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-ack-support-body {
+  margin: 0 0 14px;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-ack-support-res {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-family: var(--fb);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-ack-support-res strong { color: var(--ink); font-weight: 600; }
+[data-skin="v2"] .v2-ack-support-res a { color: var(--forest); text-decoration: underline; }
+/* One-tap call/text links — bold + a generous tap target for reach during
+   distress (MHACSAF: minimal interaction cost). */
+[data-skin="v2"] .v2-ack-res-link {
+  color: var(--forest);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  display: inline-block;
+  padding: 2px 0;
+}
+/* Continuity — the throughline: the person's own words, last time. */
+[data-skin="v2"] .v2-ack-continuity {
+  margin: 14px 0 8px;
+  font-family: var(--fb);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--soft);
+  opacity: .9;
+}
+
+/* ── Always-on crisis-help footer link (Parts) ─────────────────────────────
+   Quiet by design: a small, muted line — present without being alarming.
+   Opens the NEUTRAL resource directory (CrisisSupport.jsx), reachable
+   regardless of ACK_REFLECT_ENABLED. */
+[data-skin="v2"] .v2-crisis-foot {
+  margin: 14px 0 4px;
+}
+[data-skin="v2"] .v2-crisis-link {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: var(--fb);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+[data-skin="v2"] .v2-crisis-link:hover { color: var(--forest); }
+/* Overlay — dim backdrop, centered card. */
+[data-skin="v2"] .v2-crisis-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--ink) 42%, transparent);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+[data-skin="v2"] .v2-crisis-overlay-inner {
+  width: 100%;
+  max-width: 420px;
+  max-height: 86vh;            /* fallback */
+  max-height: 86dvh;          /* track the iOS toolbar so the crisis card never clips */
+  overflow: hidden auto;
+  background: var(--screen);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 22px 20px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .22);
+}
+/* Neutral directory card — factual, presumes nothing about the user's state. */
+[data-skin="v2"] .v2-crisis-lead {
+  margin: 0 0 8px;
+  font-family: var(--fm);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-crisis-body {
+  margin: 0 0 14px;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--soft);
+}

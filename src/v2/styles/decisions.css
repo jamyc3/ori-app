@@ -1,0 +1,325 @@
+/* Ori v2 — Decisions (defer-to-window). Calm, non-evaluative: a place a
+ * decision rests until a sharper hour. Tokens shared with the rest of v2;
+ * all selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-decisions {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  /* Keep this surface's scroll to itself — without it, scrolling past the ends
+   * chains to the document and lets iOS shove the whole fixed frame around when
+   * the keyboard opens (the "going up on the container" jump). */
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 0 calc(env(safe-area-inset-bottom, 12px) + 24px);
+}
+
+/* Golden-ratio composition: two flex spacers split the page's free space 1 : φ
+ * (1.618), so the content mass settles on the upper golden line — less air above,
+ * more below — instead of hugging the top with a dead void beneath. They collapse
+ * to nothing once the content is tall enough to scroll. */
+[data-skin="v2"] .v2-dec-spacer { flex: 1 1 0; min-height: 0; pointer-events: none; }
+[data-skin="v2"] .v2-dec-spacer.s2 { flex-grow: 1.618; }
+
+[data-skin="v2"] .v2-dec-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  padding-top: 4px;
+}
+
+[data-skin="v2"] .v2-dec-intro {
+  font-family: var(--fb);
+  font-size: calc(14px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: center;
+}
+[data-skin="v2"] .v2-dec-intro em { font-style: italic; color: var(--ink); }
+
+[data-skin="v2"] .v2-dec-park {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+[data-skin="v2"] .v2-dec-input {
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.45;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  /* A comfortable writing box that grows with the text (JS autosize) up to a
+   * cap, then scrolls inside itself — never a cramped 2-line box. */
+  min-height: 84px;
+  max-height: 220px;
+  overflow: hidden auto;
+}
+[data-skin="v2"] .v2-dec-input::placeholder { color: var(--faint); }
+[data-skin="v2"] .v2-dec-input:focus { outline: none; border-color: var(--forest); }
+
+[data-skin="v2"] .v2-dec-weightrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-dec-chip {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 11px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-dec-chip.is-on {
+  color: var(--forest);
+  border-color: var(--forest);
+}
+[data-skin="v2"] .v2-dec-park-btn {
+  margin-left: auto;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  /* Mixed into the ambient instead of a flat green block (same idea as the
+   * glassy reflect orb): the green lives in the text + edge, the body is a
+   * faint forest-tinted frost that lets the backdrop blur through. */
+  color: var(--forest);
+  background-color: color-mix(in srgb, var(--forest) 20%, var(--glass-bg));
+  background-image: var(--glass-sheen);
+  border: 1px solid color-mix(in srgb, var(--forest) 45%, var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px;
+  padding: 9px 18px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-dec-park-btn:disabled { opacity: .4; cursor: default; }
+
+[data-skin="v2"] .v2-dec-group { display: flex; flex-direction: column; gap: 8px; }
+[data-skin="v2"] .v2-dec-grouphead {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dec-grouphead.muted { color: var(--faint); }
+
+[data-skin="v2"] .v2-dec-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-dec-card.is-ready { border-color: var(--forest); }
+[data-skin="v2"] .v2-dec-card.is-done { opacity: .55; }
+[data-skin="v2"] .v2-dec-text {
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.45;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-dec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+[data-skin="v2"] .v2-dec-when {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dec-revisit {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: none;
+  border: 1px solid var(--forest);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+[data-skin="v2"] .v2-dec-revisit.ghost { color: var(--faint); border-color: var(--line); }
+
+/* Pre-decision clarity check (KSS) */
+[data-skin="v2"] .v2-dec-clarity-start {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  text-align: left;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-dec-clarity-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 4px 0 2px;
+}
+[data-skin="v2"] .v2-dec-clarity-q {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dec-clarity-range {
+  width: 100%;
+  accent-color: var(--forest);
+}
+[data-skin="v2"] .v2-dec-clarity-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: -2px;
+}
+[data-skin="v2"] .v2-dec-clarity-read {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+[data-skin="v2"] .v2-dec-clarity-read.is-clear { color: var(--forest); }
+[data-skin="v2"] .v2-dec-clarity-read.is-mid   { color: var(--muted); }
+[data-skin="v2"] .v2-dec-clarity-read.is-foggy { color: #a8704a; }
+[data-skin="v2"] .v2-dec-clarity-save {
+  align-self: flex-start;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: none;
+  border: 1px solid var(--forest);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-dec-clarity {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+[data-skin="v2"] .v2-dec-clarity .v2-dec-clarity-read { flex: 1 1 auto; }
+[data-skin="v2"] .v2-dec-clarity-redo {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+/* Look-back outcome loop */
+[data-skin="v2"] .v2-dec-card.is-lookback { border-color: var(--sage, var(--forest)); }
+[data-skin="v2"] .v2-dec-lookback-q {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dec-outcome-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-dec-outcome-btn {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--forest);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-dec-outcome-btn:hover { border-color: var(--forest); }
+[data-skin="v2"] .v2-dec-outcome-tag {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* "You've faced this before" echo (Phase 4 — retrieval over your own history) */
+[data-skin="v2"] .v2-dec-echo {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  border-left: 2px solid var(--sage, var(--forest));
+  padding: 2px 0 2px 12px;
+  margin-top: -4px;
+}
+[data-skin="v2"] .v2-dec-echo span { color: var(--ink); font-style: normal; }
+
+[data-skin="v2"] .v2-dec-empty {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--faint);
+  text-align: center;
+  padding: 28px 8px;
+  line-height: 1.55;
+}
+
+[data-skin="v2"] .v2-dec-close {
+  /* the s2 golden spacer provides the gap above; close just sits at the bottom */
+  margin-top: 0;
+  align-self: center;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  padding: 12px;
+  cursor: pointer;
+}

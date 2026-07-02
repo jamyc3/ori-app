@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Fixed-layout native-feel app: no user zoom (pinch / double-tap / input-focus).
+         Text resizing lives in the in-app read-scale control (data-rs), not browser zoom.
+         maximum-scale + user-scalable are the web-layer line; the WKWebView scrollView is
+         also pinned to zoomScale 1 natively (MyViewController.swift) since iOS can ignore this. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <title>Ori — Cognitive Realization</title>
+    <meta name="description" content="A quiet coach for body, mind, and mood. Journals + biometrics + structured reading." />
+
+    <!-- Favicons & icons -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="mask-icon" href="/icon.svg" color="#9FBF98" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- iOS home-screen behaviour -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Ori" />
+
+    <!-- System color -->
+    <meta name="theme-color" content="#F7F3EC" />
+
+    <style>
+      html, body { margin: 0; padding: 0; background: #F7F3EC; }
+      body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+
+      /* Launch splash — the Ori brand moment on every open. Shown immediately
+         (before React), removed by main.jsx once the app has mounted. Cream
+         ground matches the body background, so there is no flash either side. */
+      #ori-splash {
+        position: fixed; inset: 0; z-index: 2147483647;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: radial-gradient(120% 80% at 50% 16%, #FBF6EC 0%, #ECE4D4 72%);
+        transition: opacity .45s ease;
+      }
+      #ori-splash.ori-splash-hide { opacity: 0; pointer-events: none; }
+      .ori-splash-lock {
+        position: relative; display: inline-block;
+        font-family: ui-serif, 'New York', 'Iowan Old Style', Georgia, serif;
+        font-weight: 400; font-size: 64px; line-height: .9; letter-spacing: -.015em; color: #1A1A1A;
+      }
+      .ori-splash-lock .r { position: relative; }
+      .ori-splash-lock .mk { position: absolute; left: 50%; transform: translateX(-50%); bottom: .875em; }
+      .ori-splash-lock .mk svg { display: block; width: .5em; height: .5em; }
+      .ori-splash-tag {
+        margin-top: 22px; font-family: ui-serif, 'New York', Georgia, serif;
+        font-style: italic; font-size: 17px; color: #3F5B39;
+      }
+      /* Appearance-aware splash — matches the app's theme (Shell.jsx follows the
+         OS: dark → Nightfall, light → Day), so the splash hands off with no flash.
+         CSS `stroke` overrides the SVG's inline stroke attribute, recoloring the leaf. */
+      @media (prefers-color-scheme: dark) {
+        html, body { background: #0E120D; }
+        #ori-splash { background: radial-gradient(120% 80% at 50% 16%, #1B2417 0%, #0E120D 70%); }
+        .ori-splash-lock { color: #F1ECDF; }
+        .ori-splash-tag { color: #A8C58B; }
+        #ori-splash svg g { stroke: #A8C58B; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Brand launch splash (see <style> above). aria-hidden: decorative. -->
+    <div id="ori-splash" aria-hidden="true">
+      <div class="ori-splash-lock">O<span class="r">r<span class="mk"><svg viewBox="0 0 120 120" fill="none"><g stroke="#3F5B39" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M59 16 C 40 44, 36 78, 50 106 C 74 82, 82 46, 59 16 Z"/><path d="M50 106 C 54 74, 56 44, 59 16"/></g></svg></span></span>i</div>
+      <div class="ori-splash-tag">body and mind, read back to you</div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

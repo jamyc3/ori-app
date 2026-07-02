@@ -1,0 +1,23 @@
+/* Ori — minimal global reset.
+   All component styles live inline in CPI.jsx (CSS vars are set on the
+   root wrapper at line ~4468). This file only handles cross-browser
+   rendering polish that can't be expressed inline. */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F7F3EC;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent iOS Safari from auto-zooming on focused inputs.
+   Belt-and-braces with per-input fontSize: 16 in components. */
+input, textarea, select {
+  font-size: 16px;
+}
+
+/* Quiet scrollbars on desktop browsers. Mobile uses native overlays. */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,.08); border-radius: 2px; }

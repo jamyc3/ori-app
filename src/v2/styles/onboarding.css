@@ -1,0 +1,498 @@
+/* Ori v2 — Onboarding
+ * Multi-scene flow with progress pips. Full-viewport replaces Shell chrome.
+ * Mirrors the design's onboard-1…6 screens (v2-preview.html).
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-ob {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 28px calc(env(safe-area-inset-bottom, 12px) + 32px);
+  overflow: hidden auto;
+  overscroll-behavior: none;
+}
+
+[data-skin="v2"] .v2-ob-skip {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 30;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 6px 10px;
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  background: transparent;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-ob-skip:hover {
+  color: var(--muted);
+}
+
+[data-skin="v2"] .v2-ob-prog {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 6px 0 22px;
+}
+[data-skin="v2"] .v2-ob-prog i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  transition: width .2s ease, background .2s ease;
+}
+[data-skin="v2"] .v2-ob-prog i.on {
+  background: var(--forest);
+  width: 18px;
+}
+
+[data-skin="v2"] .v2-ob-body {
+  /* grow to fill on short scenes (keeps content centred), but DON'T shrink below
+     the content — otherwise a tall scene (the promises/consent cards) gets
+     squeezed and overflows onto the footer pill instead of letting .v2-ob scroll. */
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  min-height: 0;
+  padding: 16px 4px;
+}
+
+[data-skin="v2"] .v2-ob-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+[data-skin="v2"] .v2-ob-title {
+  font-family: var(--fr);
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(30px * var(--read-scale));
+  line-height: 1.3;
+  color: var(--soft);
+  margin: 0;
+  max-width: 26ch;
+}
+[data-skin="v2"] .v2-ob-title.sm {
+  font-size: calc(26px * var(--read-scale));
+}
+
+[data-skin="v2"] .v2-ob-sub {
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+[data-skin="v2"] .v2-ob-sub b {
+  color: var(--soft);
+  font-weight: 600;
+}
+
+/* Breathing mark — blurred tri-color aura (a1), hairline ring (a2),
+ * solid core holding the glyph. Matches the design's .ob-mark. */
+[data-skin="v2"] .v2-ob-mark {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+[data-skin="v2"] .v2-ob-mark span {
+  position: absolute;
+  border-radius: 50%;
+}
+[data-skin="v2"] .v2-ob-mark .a1 {
+  inset: 10px;
+  filter: blur(20px);
+  background:
+    radial-gradient(58% 58% at 33% 31%, var(--amber) 0%, transparent 66%),
+    radial-gradient(58% 58% at 70% 34%, var(--sage) 0%, transparent 66%),
+    radial-gradient(66% 66% at 50% 75%, var(--forest) 0%, transparent 70%);
+  animation: v2-ob-spin 18s linear infinite, v2-ob-pulse 4.6s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-ob-mark .a2 {
+  inset: 34px;
+  border: 1px solid var(--hair);
+  background: none;
+}
+[data-skin="v2"] .v2-ob-mark .core {
+  position: relative;
+  z-index: 2;
+  width: 84px;
+  height: 84px;
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+}
+@keyframes v2-ob-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes v2-ob-pulse {
+  0%, 100% { opacity: .65; }
+  50%      { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="v2"] .v2-ob-mark .a1 { animation: none; }
+}
+
+/* Name field — borderless underline input per the design's .ob-field. */
+[data-skin="v2"] .v2-ob-input {
+  width: 100%;
+  max-width: 320px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  outline: none;
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(26px * var(--read-scale));
+  color: var(--ink);
+  text-align: center;
+  padding: 14px 0;
+}
+[data-skin="v2"] .v2-ob-input::placeholder {
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-ob-input:focus {
+  border-bottom-color: var(--forest);
+}
+
+/* Choice cards (mode fork + wearable pick) — design's .ob-ch. */
+[data-skin="v2"] .v2-ob-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  max-width: 340px;
+}
+[data-skin="v2"] .v2-ob-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  gap: 7px;
+  padding: 18px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color .2s, background .2s, transform .15s;
+}
+[data-skin="v2"] .v2-ob-mode:active {
+  transform: scale(.99);
+}
+[data-skin="v2"] .v2-ob-mode.on {
+  border-color: var(--forest);
+  background: var(--cardHi);
+}
+[data-skin="v2"] .v2-ob-mode-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+[data-skin="v2"] .v2-ob-mode-ic {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--forest-q);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-ob-mode-ic.oura  { background: #fcedd9; }
+[data-skin="v2"] .v2-ob-mode-ic.apple { background: #fde6e8; }
+[data-skin="v2"] .v2-ob-mode-h {
+  font-family: var(--fb);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-ob-mode-tag {
+  margin-left: auto;
+  font-family: var(--fm);
+  font-size: 8px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--forest);
+  border: 1px solid var(--forest-q);
+  border-radius: 20px;
+  padding: 4px 9px;
+}
+[data-skin="v2"] .v2-ob-mode-tag.sage {
+  color: var(--sage);
+  border-color: var(--forest-q);
+}
+[data-skin="v2"] .v2-ob-mode-status {
+  margin-left: auto;
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+[data-skin="v2"] .v2-ob-mode-status.connected {
+  color: var(--screen);
+  background: var(--forest);
+  border-color: var(--forest);
+}
+/* Not-yet-connected pill reads as an invitation, not a dead label. */
+[data-skin="v2"] .v2-ob-mode:not(.on):not(:disabled) .v2-ob-mode-status {
+  color: var(--forest);
+  border-color: color-mix(in srgb, var(--forest) 40%, transparent);
+}
+/* A connected card stops being tappable; keep it bright (it's "done"),
+ * and only dim a card that's disabled because it's unavailable (e.g. Apple
+ * Health on the web). */
+[data-skin="v2"] .v2-ob-mode:disabled { cursor: default; }
+[data-skin="v2"] .v2-ob-mode:disabled:not(.on) { opacity: .55; }
+
+/* Inline result of an in-onboarding connect — sync count or a soft error. */
+[data-skin="v2"] .v2-ob-connect-note {
+  margin: 14px 2px 0;
+  font-family: var(--fb);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--soft);
+  text-align: center;
+  text-wrap: pretty;
+}
+[data-skin="v2"] .v2-ob-mode-p {
+  font-family: var(--fb);
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Time chip picker — design's .ob-tchip. */
+[data-skin="v2"] .v2-ob-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+  max-width: 320px;
+}
+[data-skin="v2"] .v2-ob-chip {
+  padding: 12px 18px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 22px;
+  font-family: var(--fm);
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: var(--soft);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-ob-chip.on {
+  background: var(--forest);
+  color: var(--screen);
+  border-color: var(--forest);
+}
+
+/* Three-promise contract — design's .ob-ack. */
+[data-skin="v2"] .v2-ob-acks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+}
+[data-skin="v2"] .v2-ob-ack {
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 18px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: background .35s ease, border-color .35s ease, transform .25s ease;
+}
+[data-skin="v2"] .v2-ob-ack:hover {
+  border-color: var(--line);
+}
+[data-skin="v2"] .v2-ob-ack.on {
+  background: var(--fresh);
+  border-color: var(--forest-q);
+}
+[data-skin="v2"] .v2-ob-ack-num {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: 22px;
+  color: var(--faint);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s ease, border-color .3s ease, color .3s ease,
+              transform .35s cubic-bezier(.34, 1.56, .64, 1);
+}
+[data-skin="v2"] .v2-ob-ack.on .v2-ob-ack-num {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--screen);
+  transform: scale(1.05);
+}
+[data-skin="v2"] .v2-ob-ack-num .num {
+  display: block;
+  line-height: 1;
+  transition: opacity .2s ease;
+}
+[data-skin="v2"] .v2-ob-ack-num .chk {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%) scale(.5);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.34, 1.56, .64, 1) .05s, opacity .25s ease .05s;
+}
+[data-skin="v2"] .v2-ob-ack.on .v2-ob-ack-num .num { opacity: 0; }
+[data-skin="v2"] .v2-ob-ack.on .v2-ob-ack-num .chk {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+[data-skin="v2"] .v2-ob-ack-tx {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+[data-skin="v2"] .v2-ob-ack-h {
+  font-family: var(--fb);
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.3;
+}
+[data-skin="v2"] .v2-ob-ack-p {
+  font-family: var(--fb);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Optional opt-in — set apart from the required promises: a quiet label and a
+   lighter, dashed-rim card so it never reads as another thing you must do. */
+[data-skin="v2"] .v2-ob-acks-opt-label {
+  margin: 8px 0 -4px;
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-ob-ack.optional {
+  border-style: dashed;
+}
+[data-skin="v2"] .v2-ob-ack.optional .v2-ob-ack-num {
+  font-size: 20px;
+}
+
+/* Ack pips inside the CTA pill. */
+[data-skin="v2"] .v2-ob-pips {
+  display: inline-flex;
+  gap: 5px;
+  margin-left: 10px;
+}
+[data-skin="v2"] .v2-ob-pips i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background .25s ease;
+}
+[data-skin="v2"] .v2-ob-pips i.on {
+  background: var(--screen);
+}
+
+[data-skin="v2"] .v2-ob-foot {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 22px;
+}
+
+[data-skin="v2"] .v2-ob-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 36px;
+  background: var(--forest);
+  border: 0;
+  border-radius: 24px;
+  font-family: var(--fb);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--screen);
+  cursor: pointer;
+  min-width: 200px;
+  max-width: 320px;
+  transition: transform .15s ease, opacity .2s ease;
+}
+[data-skin="v2"] .v2-ob-pill:active {
+  transform: scale(.98);
+}
+[data-skin="v2"] .v2-ob-pill:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+[data-skin="v2"] .v2-ob-pill.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-ob-ghostlink {
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: center;
+  padding: 8px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}

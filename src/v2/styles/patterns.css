@@ -1,0 +1,241 @@
+/* Ori v2 — Patterns (temporal lens)
+ * Design-language shells: eyebrow, 30px serif headline, 18px-radius cards,
+ * Hanken micro-labels. All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-patterns {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 24px);
+}
+
+/* Empty state — eyebrow stays pinned at the top, the title/lead/CTA cluster
+ * grows to fill and centres so the screen reads as composed, not abandoned. */
+[data-skin="v2"] .v2-patterns.is-empty {
+  display: flex;
+  flex-direction: column;
+}
+[data-skin="v2"] .v2-pat-empty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-bottom: 12%;
+}
+
+[data-skin="v2"] .v2-pat-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 6px 0 14px;
+}
+
+[data-skin="v2"] .v2-pat-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 12px;
+  letter-spacing: -.01em;
+}
+
+[data-skin="v2"] .v2-pat-lead {
+  font-family: var(--fb);
+  font-size: calc(14.5px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0 0 20px;
+  text-wrap: pretty;
+}
+
+/* Chart + stat cards — design's .group/.cal card shell. */
+[data-skin="v2"] .v2-pat-card {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+[data-skin="v2"] .v2-pat-card-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+[data-skin="v2"] .v2-pat-card-meta {
+  letter-spacing: .08em;
+  color: var(--faint);
+}
+/* Card subject — plain-language name for what the line is (paired with the
+   provenance chip), so the graph says what it's about before it's read. */
+[data-skin="v2"] .v2-pat-card-subject {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--fd);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+[data-skin="v2"] .v2-pat-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+[data-skin="v2"] .v2-pat-stat {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 16px;
+}
+[data-skin="v2"] .v2-pat-stat-label {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+[data-skin="v2"] .v2-pat-stat-val {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(34px * var(--read-scale));
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+[data-skin="v2"] .v2-pat-stat-sub {
+  font-family: var(--fb);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+[data-skin="v2"] .v2-pat-foot {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .06em;
+  color: var(--faint);
+  text-align: center;
+  margin: 6px 0 0;
+  line-height: 1.6;
+}
+
+/* Lens pills + lens card — v1's six-pattern carousel, design-language. */
+[data-skin="v2"] .v2-pat-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 14px;
+  margin-top: 6px;
+}
+[data-skin="v2"] .v2-pat-pill {
+  flex: 0 0 auto;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+[data-skin="v2"] .v2-pat-pill.on {
+  background: var(--forest);
+  color: var(--screen);
+  border-color: var(--forest);
+}
+[data-skin="v2"] .v2-pat-cal {
+  display: inline-block;
+  font-family: var(--fm);
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid rgba(203, 168, 91, .3);
+  border-radius: 10px;
+  padding: 3px 8px;
+  margin-bottom: 10px;
+}
+[data-skin="v2"] .v2-pat-lens-h {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(22px * var(--read-scale));
+  line-height: 1.3;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-pat-lens-m {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+}
+[data-skin="v2"] .v2-pat-lens-p {
+  font-family: var(--fb);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--soft);
+  margin: 12px 0 0;
+}
+[data-skin="v2"] .v2-pat-lens-ex {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+[data-skin="v2"] .v2-pat-lens-ex li {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--soft);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+/* A dated example taps through to that day. */
+[data-skin="v2"] .v2-pat-ex-go {
+  font: inherit;
+  font-style: italic;
+  color: var(--forest);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--forest-q);
+  text-underline-offset: 2px;
+}
+
+/* Empty-state CTA — a new user's path into their first voice capture. */
+[data-skin="v2"] .v2-pat-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--screen);
+  background: var(--forest);
+  border: none;
+  border-radius: 18px;
+  padding: 11px 18px;
+  margin: 0 0 20px;
+  cursor: pointer;
+}

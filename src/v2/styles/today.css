@@ -1,0 +1,504 @@
+/* Ori v2 — Today surface
+ * Pending-letter banner · "How was today?" prompt · breathing orb hero
+ * "Prefer to write it down" · three-row ring legend.
+ * All selectors scoped under [data-skin="v2"]. */
+
+/* Pending-letter (or letter-ready) banner — same shape as design's .note. */
+[data-skin="v2"] .v2-note {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  padding: 11px 13px;
+  margin-top: 6px;
+  cursor: pointer;
+  transition: transform .15s, background .5s ease;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+}
+[data-skin="v2"] .v2-note:active {
+  transform: scale(.99);
+}
+[data-skin="v2"] .v2-note.fresh {
+  background: var(--fresh);
+  border-color: var(--forest-q);
+}
+[data-skin="v2"] .v2-note .v2-note-ic {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--forest-q);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--forest);
+}
+[data-skin="v2"] .v2-note .v2-note-ic.clay {
+  background: rgba(199, 108, 66, 0.14);
+  color: var(--clay);
+}
+[data-skin="v2"] .v2-note .v2-note-tx {
+  flex: 1;
+  min-width: 0;
+}
+[data-skin="v2"] .v2-note .v2-note-tx b {
+  display: block;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--forest);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+[data-skin="v2"] .v2-note.clay .v2-note-tx b {
+  color: var(--clay);
+}
+[data-skin="v2"] .v2-note .v2-note-tx span {
+  font-family: var(--fb);
+  font-size: 13px;
+  color: var(--soft);
+}
+
+/* Hero — orb + cue + write-toggle + ring legend, as one centred cluster.
+ * Grows to absorb the slack, but with a bottom bias (padding-bottom) so the
+ * whole group sits a touch ABOVE centre — the rings land just under "Prefer
+ * to write it down" instead of drifting toward the tab bar. */
+[data-skin="v2"] .v2-orbring {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* The mic is the screen's focal point: a big orb dropped low into the natural
+   * one-handed thumb arc (centered, so either thumb reaches it), write pill +
+   * R/D/F tucked just beneath. The space around it stays clean — the page's own
+   * background — with only the small R/D/F halo on the orb itself for warmth. */
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 8px 0 54px;
+}
+[data-skin="v2"] .v2-hero-prompt {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(29px * var(--read-scale));
+  color: var(--ink);
+  letter-spacing: .01em;
+  text-align: center;
+  margin: 0 0 12px;
+}
+[data-skin="v2"] .v2-orb {
+  position: relative;
+  width: 252px;
+  height: 252px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .15s;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-skin="v2"] .v2-orb:active {
+  transform: scale(.97);
+}
+[data-skin="v2"] .v2-orb .v2-orb-aura {
+  position: absolute;
+  inset: -44px;
+  border-radius: 50%;
+  filter: blur(42px);
+  /* A cosmic glow, not a fan. The R/D/F hues (Reserves amber, Form sage, Demands
+   * ink) plus the app's forest are spread as soft points ALL THE WAY AROUND the
+   * orb and floated over a unifying central forest wash, so they melt into one
+   * enveloping nebula instead of two lobes stacked at the top. A very slow drift
+   * (60s) makes it shimmer like a slowly turning field; the opacity breath keeps
+   * it alive. The wide inset + heavy blur let it bleed seamlessly into the page. */
+  background:
+    radial-gradient(38% 38% at 28% 24%, var(--amber) 0%, transparent 70%),
+    radial-gradient(40% 40% at 75% 28%, var(--sage) 0%, transparent 70%),
+    radial-gradient(44% 44% at 70% 78%, var(--forest) 0%, transparent 72%),
+    radial-gradient(38% 38% at 22% 74%, color-mix(in srgb, var(--ink) 36%, transparent) 0%, transparent 72%),
+    radial-gradient(72% 72% at 50% 52%, color-mix(in srgb, var(--forest) 28%, transparent) 0%, transparent 76%);
+  opacity: .7;
+  animation: v2-aura-spin 60s linear infinite, v2-aura-pulse 4.6s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-orb .v2-orb-ring {
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-orb .v2-orb-core {
+  position: relative;
+  z-index: 2;
+  width: 174px;
+  height: 174px;
+  border-radius: 50%;
+  /* Clean core — takes the page's own surface tone (collects the background:
+   * near-black in nightfall, paper in day) instead of a green fill. Just a quiet
+   * hairline rim + the mic; the warmth comes from the small R/D/F aura behind. */
+  background: color-mix(in srgb, var(--cardHi) 70%, transparent);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* No directional drop-shadow: on the dark page a downward shadow cast a dark
+   * arc under the disc that read as a "divider". A soft, even halo-shadow gives
+   * the disc gentle depth without any seam, so the orb sits on one continuous
+   * page while keeping its hairline rim (the mic's tap target). */
+  box-shadow: 0 0 28px rgba(0, 0, 0, 0.12);
+  /* color/border ease over ~1.4s so the idle warm-up arrives softly, not snapped. */
+  transition: transform .2s, color 1.4s ease, border-color 1.4s ease;
+  color: var(--forest);
+  animation: v2-orb-breathe 4.6s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-orb:active .v2-orb-core {
+  transform: scale(.95);
+}
+@keyframes v2-aura-spin { to { transform: rotate(360deg); } }
+@keyframes v2-aura-pulse {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: .85; }
+}
+@keyframes v2-orb-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+/* Idle nudge — a slow, breathing light. After the user lingers, the mic warms
+ * to a soft sage and a gentle glow swells and fades in time with the orb's own
+ * 4.6s breath: one unhurried "I'm here when you're ready," never an alarm. No
+ * sweep, no radiating pings — those read as "do something NOW." The breath is
+ * asymmetric on the golden ratio (swell to ~38%, long ~62% fade), and because
+ * the glow keyframe starts from nothing and the colour eases in (transition on
+ * .v2-orb-core), the whole thing arrives softly rather than snapping on. */
+[data-skin="v2"] .v2-orb.is-idle .v2-orb-core {
+  animation: v2-orb-breathe 4.6s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-orb.is-idle .v2-orb-aura {
+  animation: v2-aura-idle 4.6s ease-in-out infinite;
+}
+@keyframes v2-aura-idle {
+  0%, 100% { opacity: .58; }
+  38%      { opacity: .8; }
+}
+
+/* Reduce Motion on: a soft static lit state instead of motion — the mic warms
+ * gently and holds, so the nudge still lands without any movement. */
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="v2"] .v2-orb .v2-orb-aura,
+  [data-skin="v2"] .v2-orb .v2-orb-core,
+  [data-skin="v2"] .v2-orb.is-idle .v2-orb-aura,
+  [data-skin="v2"] .v2-orb.is-idle .v2-orb-core,
+  [data-skin="v2"] .v2-hero-write.is-idle {
+    animation: none;
+  }
+  [data-skin="v2"] .v2-orb.is-idle .v2-orb-aura { opacity: .82; }
+  [data-skin="v2"] .v2-hero-write.is-idle {
+    border-color: color-mix(in srgb, var(--forest) 45%, transparent);
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--forest) 13%, transparent),
+      0 10px 26px color-mix(in srgb, var(--forest) 22%, transparent);
+  }
+  [data-skin="v2"] .v2-orb .v2-orb-aura { opacity: .6; }
+}
+
+[data-skin="v2"] .v2-hero-write {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 11px 20px;
+  border-radius: 24px;
+  /* Same rim language as the mic orb: a sage ring with a soft outer glow,
+   * so the write path reads as a sibling of the speak path, not a plain link. */
+  border: 1px solid color-mix(in srgb, var(--forest) 34%, transparent);
+  background: var(--card);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--forest) 7%, transparent),
+    0 8px 24px color-mix(in srgb, var(--forest) 14%, transparent);
+  color: var(--soft);
+  font-family: var(--fb);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform .15s, background .15s, box-shadow .2s;
+}
+[data-skin="v2"] .v2-hero-write:active {
+  transform: scale(.97);
+  background: var(--cardHi);
+}
+/* Idle — the write pill's rim breathes on the same slow 4.6s period as the mic
+ * but offset half a cycle (2.3s), so the two swell in gentle alternation, never
+ * together. Same golden-ratio peak (~38%) and a soft intensity, to match. */
+[data-skin="v2"] .v2-hero-write.is-idle {
+  animation: v2-write-sparkle 4.6s ease-in-out 2.3s infinite;
+}
+@keyframes v2-write-sparkle {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--forest) 7%, transparent),
+      0 8px 24px color-mix(in srgb, var(--forest) 14%, transparent);
+  }
+  38% {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--forest) 15%, transparent),
+      0 10px 28px color-mix(in srgb, var(--forest) 24%, transparent);
+  }
+}
+[data-skin="v2"] .v2-hero-write svg {
+  color: var(--forest);
+}
+
+/* Greeting header — design's .hdr: greeting + date · day N, Inbox button. */
+[data-skin="v2"] .v2-today-hdr {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+[data-skin="v2"] .v2-greeting {
+  font-family: var(--fb);
+  font-weight: 300;
+  font-size: calc(21px * var(--read-scale));
+  color: var(--ink);
+  letter-spacing: .2px;
+}
+[data-skin="v2"] .v2-date {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--muted);
+  margin-top: 5px;
+  margin-bottom: 18px;
+}
+[data-skin="v2"] .v2-inbox-btn {
+  position: relative;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 2px;
+  color: var(--soft);
+  transition: transform .15s, background .3s ease, box-shadow .3s ease, color .3s ease;
+}
+[data-skin="v2"] .v2-inbox-btn:active {
+  transform: scale(.93);
+  background: var(--cardHi);
+}
+
+/* Letters waiting — the inbox warms to the app's own green and breathes,
+ * gently asking to be opened. The glow deepens as more letters stack up
+ * (lvl-1 → lvl-3), so a full inbox reads at a glance without a hard count. */
+[data-skin="v2"] .v2-inbox-btn.has-unread {
+  background: var(--forest-q);
+  border-color: color-mix(in srgb, var(--forest) 38%, transparent);
+  color: var(--forest);
+  animation: v2-inbox-breathe 3.4s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-inbox-btn.lvl-1 { box-shadow: 0 0 0 0 transparent; }
+[data-skin="v2"] .v2-inbox-btn.lvl-2 {
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--forest) 26%, transparent);
+}
+[data-skin="v2"] .v2-inbox-btn.lvl-3 {
+  box-shadow: 0 6px 22px color-mix(in srgb, var(--forest) 42%, transparent);
+}
+[data-skin="v2"] .v2-inbox-btn.has-unread svg {
+  transition: transform .3s ease;
+}
+[data-skin="v2"] .v2-inbox-btn.lvl-2 svg { transform: scale(1.06); }
+[data-skin="v2"] .v2-inbox-btn.lvl-3 svg { transform: scale(1.12); }
+
+@keyframes v2-inbox-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="v2"] .v2-inbox-btn.has-unread { animation: none; }
+}
+
+/* Count badge — on-palette (forest), grows a touch as the inbox fills. */
+[data-skin="v2"] .v2-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--forest);
+  color: var(--screen);
+  font-family: var(--fm);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--screen);
+  transition: transform .3s ease;
+}
+[data-skin="v2"] .v2-inbox-btn.lvl-3 .v2-badge { transform: scale(1.12); }
+
+/* Reflect orb variant — smaller, sage mic (design's today-reflect). */
+[data-skin="v2"] .v2-orb.reflect {
+  width: 140px;
+  height: 140px;
+}
+[data-skin="v2"] .v2-orb.reflect .v2-orb-ring {
+  inset: 20px;
+}
+[data-skin="v2"] .v2-orb.reflect .v2-orb-core {
+  width: 96px;
+  height: 96px;
+  color: var(--sage);
+  /* Glassy + ~half the colour: drop the solid sage fill for the shared glass
+     treatment (frosted backdrop, bright edge, soft sheen) with only a faint
+     sage tint, so the orb frosts what's behind it instead of reading as a flat
+     green block. The lighter mic then reads with more contrast, not less. */
+  background-color: color-mix(in srgb, var(--sage) 18%, var(--glass-bg));
+  background-image: var(--glass-sheen);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Ring legend — design's compact centered strip: dot · score · label,
+ * with the state word shown only when there's no score. */
+[data-skin="v2"] .v2-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  /* Wrap (don't clip) when the three dot·score·label pairs outgrow the content
+     width at large --read-scale — nowrap pushed the headline ring scores off
+     both edges. row-gap keeps the second row legible. */
+  flex-wrap: wrap;
+  row-gap: 8px;
+  margin-top: 12px;
+}
+
+/* Each ring gets its own "i" chip inline — pair is the flex child. */
+[data-skin="v2"] .v2-lg-pair {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+[data-skin="v2"] .v2-lg-pair .v2-prov-chip {
+  opacity: .5;
+  transition: opacity .15s;
+}
+[data-skin="v2"] .v2-lg-pair .v2-prov-chip:active,
+[data-skin="v2"] .v2-lg-pair .v2-prov-chip:hover {
+  opacity: 1;
+}
+[data-skin="v2"] .v2-lg-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  transition: opacity .15s;
+}
+[data-skin="v2"] .v2-lg-row:active {
+  opacity: .6;
+}
+[data-skin="v2"] .v2-lg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  flex: 0 0 auto;
+  background: var(--forest);
+}
+[data-skin="v2"] .v2-lg-dot.amber { background: var(--amber); }
+[data-skin="v2"] .v2-lg-dot.sage  { background: var(--sage); }
+[data-skin="v2"] .v2-lg-dot.ink   { background: var(--ink); }
+/* Score + name share one font (the serif body) and one size — the home
+ * page reads as a single voice, not a mix of display/mono/caps. */
+[data-skin="v2"] .v2-lg-score {
+  font-family: var(--fb);
+  font-weight: 500;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--ink);
+  line-height: 1;
+}
+[data-skin="v2"] .v2-lg-label {
+  font-family: var(--fb);
+  font-weight: 400;
+  font-size: calc(14px * var(--read-scale));
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+
+/* Crisis resources — surfaced above everything when today's words ask. */
+[data-skin="v2"] .v2-crisis {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: rgba(199, 108, 66, 0.10);
+  border: 1px solid rgba(199, 108, 66, 0.35);
+  border-radius: 14px;
+  padding: 14px 15px;
+  margin-top: 6px;
+}
+[data-skin="v2"] .v2-crisis b {
+  font-family: var(--fb);
+  font-size: calc(14.5px * var(--read-scale));
+  font-weight: 500;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-crisis span {
+  font-family: var(--fb);
+  font-size: 13px;
+  color: var(--soft);
+  line-height: 1.6;
+}
+[data-skin="v2"] .v2-crisis a {
+  color: var(--clay);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+[data-skin="v2"] .v2-crisis i {
+  font-family: var(--fm);
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: .06em;
+  color: var(--faint);
+}
+
+/* Legend hint — why the rings are dark, and where to fix it. */
+[data-skin="v2"] .v2-legend-hint {
+  display: block;
+  margin: 14px auto 0;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: calc(12.5px * var(--read-scale));
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-legend-hint:active {
+  color: var(--soft);
+}

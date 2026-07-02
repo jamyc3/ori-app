@@ -1,0 +1,22 @@
+# dependencies / build output
+node_modules
+dist
+dist-ssr
+
+# local env — API keys live here, never in source
+.env
+.env.*
+*.local
+
+# logs & editor
+logs
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# generated eval outputs (regenerable by the eval harnesses)
+scripts/eval-*-results*.jsonl
+scripts/eval-*-results.json
+scripts/*-result*.json

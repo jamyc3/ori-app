@@ -1,0 +1,185 @@
+/* Ori v2 — Listen (voice capture)
+ * Full-viewport listening surface — animated waveform, live transcript,
+ * "write instead" escape hatch, stop button to submit. */
+
+[data-skin="v2"] .v2-listen {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+  /* Hard-clip the whole surface. The parent .v2-content is itself an
+   * overflow:auto scroller; without this, iOS WKWebView lets the growing
+   * transcript bulge the flex children and the text bleeds past the stop
+   * button. overflow:hidden here forces a definite box at every level so the
+   * only thing that scrolls is the transcript's own bounded box. */
+  overflow: hidden;
+}
+
+[data-skin="v2"] .v2-listen-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4px;
+}
+[data-skin="v2"] .v2-listen-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--forest);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-listen-eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--forest);
+  display: inline-block;
+  animation: v2-listen-pulse 1.2s ease-in-out infinite;
+}
+@keyframes v2-listen-pulse {
+  0%, 100% { opacity: .35; transform: scale(.9); }
+  50%      { opacity: 1;   transform: scale(1.1); }
+}
+[data-skin="v2"] .v2-listen-write-toggle {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 6px 0;
+}
+[data-skin="v2"] .v2-listen-write-toggle:active {
+  opacity: .6;
+}
+
+[data-skin="v2"] .v2-listen-center {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* Wave pinned at the top, transcript fills the rest and scrolls — so a long
+   * transcript never drifts the wave or pushes the stop button off-screen. */
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 22px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+[data-skin="v2"] .v2-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 72px;
+  flex: 0 0 auto;
+}
+[data-skin="v2"] .v2-wave i {
+  width: 5px;
+  border-radius: 3px;
+  background: var(--forest);
+  display: block;
+  animation: v2-wv 1.1s ease-in-out infinite;
+}
+[data-skin="v2"] .v2-wave i:nth-child(2) { animation-delay: .12s; }
+[data-skin="v2"] .v2-wave i:nth-child(3) { animation-delay: .22s; }
+[data-skin="v2"] .v2-wave i:nth-child(4) { animation-delay: .32s; }
+[data-skin="v2"] .v2-wave i:nth-child(5) { animation-delay: .14s; }
+[data-skin="v2"] .v2-wave i:nth-child(6) { animation-delay: .26s; }
+[data-skin="v2"] .v2-wave.paused i {
+  animation: none;
+  height: 14px;
+  opacity: .35;
+}
+@keyframes v2-wv {
+  0%, 100% { height: 14px; opacity: .45; }
+  50%      { height: 54px; opacity: 1; }
+}
+
+[data-skin="v2"] .v2-listen-transcript {
+  font-family: var(--fb);
+  font-weight: 300;
+  font-size: calc(23px * var(--read-scale));
+  line-height: 1.5;
+  color: var(--ink);
+  text-align: left;
+  padding: 2px 4px 10px;
+  /* One bounded, invisible box: fills the space between the wave and the stop
+   * button and scrolls internally, so the transcript stays readable however
+   * long it gets. No top fade mask — it dimmed the FIRST line when the box
+   * wasn't scrolled. padding-bottom keeps the newest line clear of the button. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+[data-skin="v2"] .v2-listen-transcript .v2-pend {
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-listen-transcript .v2-empty-cue {
+  color: var(--muted);
+  font-style: italic;
+}
+[data-skin="v2"] .v2-listen-error {
+  color: var(--clay);
+  font-family: var(--fb);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+[data-skin="v2"] .v2-listen-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-top: 28px;
+  flex: 0 0 auto;
+  /* A clean zone for the cue + stop button — sits above the transcript so the
+   * button never reads with text bleeding through it. */
+  position: relative;
+  z-index: 1;
+  background: var(--screen);
+}
+[data-skin="v2"] .v2-listen-cue {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-stopbtn {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: var(--forest);
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px var(--forest-q);
+  transition: transform .15s;
+}
+[data-skin="v2"] .v2-stopbtn:active {
+  transform: scale(.93);
+}
+[data-skin="v2"] .v2-stopbtn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+[data-skin="v2"] .v2-stopbtn .v2-sq {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--screen);
+}

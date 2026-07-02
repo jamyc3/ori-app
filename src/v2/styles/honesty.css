@@ -1,0 +1,98 @@
+/* Ori v2 — Honesty layers explainer
+ * Plain-language explanation of the L1/L2/L3/L4 model the build-time
+ * audit enforces. All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-honesty {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+}
+
+[data-skin="v2"] .v2-honesty-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 8px 0 12px;
+  letter-spacing: -0.01em;
+}
+[data-skin="v2"] .v2-honesty-lead {
+  font-family: var(--fr);
+  font-size: calc(15.5px * var(--read-scale));
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 28px;
+  text-wrap: pretty;
+  font-style: italic;
+}
+
+[data-skin="v2"] .v2-honesty-row {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-honesty-row:last-of-type {
+  border-bottom: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-honesty-glyph {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cardHi);
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-honesty-glyph.l1 { color: var(--sage); }
+[data-skin="v2"] .v2-honesty-glyph.l2 { color: var(--forest); }
+[data-skin="v2"] .v2-honesty-glyph.l3 { color: var(--amber); }
+[data-skin="v2"] .v2-honesty-glyph.l4 { color: var(--clay); }
+[data-skin="v2"] .v2-honesty-body {
+  flex: 1;
+  min-width: 0;
+}
+[data-skin="v2"] .v2-honesty-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+[data-skin="v2"] .v2-honesty-label {
+  font-family: var(--fb);
+  font-weight: 500;
+  font-size: calc(17px * var(--read-scale));
+  color: var(--ink);
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+[data-skin="v2"] .v2-honesty-body p {
+  margin: 0;
+  font-family: var(--fb);
+  font-size: calc(14px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--soft);
+  text-wrap: pretty;
+}
+
+[data-skin="v2"] .v2-honesty-foot {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hair);
+  font-family: var(--fr);
+  font-size: calc(14.5px * var(--read-scale));
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}

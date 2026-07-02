@@ -1,0 +1,283 @@
+/* Ori v2 — Settings sub-screens (Connected sources · Export & privacy)
+ * Shared list shapes: back row, page title, grouped rows with status pills.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-src {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 14px 0 calc(env(safe-area-inset-bottom, 12px) + 28px);
+}
+
+[data-skin="v2"] .v2-src-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  color: var(--ink);
+  margin: 8px 0 10px;
+}
+
+[data-skin="v2"] .v2-src-sub {
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+
+[data-skin="v2"] .v2-src-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 22px 0 10px;
+}
+
+[data-skin="v2"] .v2-src-group {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  overflow: hidden;
+  /* Each card carries a 30px-blur glass shadow (glass.css). With no gap,
+   * adjacent cards' shadows pile onto each other and the translucent edges
+   * bleed — reading as overlapping boxes. Separate them so every shadow is
+   * its own clean lift. */
+  margin-bottom: 16px;
+}
+[data-skin="v2"] .v2-src-group:last-of-type {
+  margin-bottom: 0;
+}
+
+[data-skin="v2"] .v2-src-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  transition: background .15s ease;
+}
+[data-skin="v2"] .v2-src-row:last-child {
+  border-bottom: none;
+}
+[data-skin="v2"] .v2-src-row:not(.static):hover {
+  background: var(--hair);
+}
+[data-skin="v2"] .v2-src-row.static {
+  cursor: default;
+}
+
+[data-skin="v2"] .v2-src-tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Leading action glyph — color-coded so each row reads as its own thing. */
+[data-skin="v2"] .v2-src-ic {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--forest-q);
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-skin="v2"] .v2-src-ic svg { width: 19px; height: 19px; }
+[data-skin="v2"] .v2-src-ic.clay {
+  background: color-mix(in srgb, var(--clay) 14%, transparent);
+  color: var(--clay);
+}
+
+[data-skin="v2"] .v2-src-l {
+  font-family: var(--fb);
+  font-size: calc(14.5px * var(--read-scale));
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-src-l.clay {
+  color: var(--clay);
+}
+[data-skin="v2"] .v2-src-s {
+  font-family: var(--fb);
+  font-size: 11.5px;
+  color: var(--faint);
+  line-height: 1.45;
+}
+
+/* Status pill — design's .src-status. */
+[data-skin="v2"] .v2-src-status {
+  flex: 0 0 auto;
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  padding: 5px 11px;
+  transition: all .2s ease;
+}
+[data-skin="v2"] .v2-src-status.connected {
+  color: var(--screen);
+  background: var(--forest);
+  border-color: var(--forest);
+}
+[data-skin="v2"] .v2-src-status.connected::before {
+  content: "✓ ";
+}
+
+[data-skin="v2"] .v2-src-chev {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-src-chev.clay {
+  color: var(--clay);
+}
+
+[data-skin="v2"] .v2-src-foot {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: var(--faint);
+  text-align: center;
+  padding-top: 16px;
+}
+
+/* Delete-a-day inline editor. */
+[data-skin="v2"] .v2-src-del {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+[data-skin="v2"] .v2-src-date {
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  color: var(--ink);
+  font-family: var(--fb);
+  font-size: 13px;
+  padding: 8px 10px;
+  color-scheme: dark;
+}
+[data-skin="v2"][data-tod="day"] .v2-src-date {
+  color-scheme: light;
+}
+[data-skin="v2"] .v2-src-mini {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--soft);
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-src-mini.clay {
+  color: var(--clay);
+  border-color: rgba(199, 108, 66, .35);
+}
+[data-skin="v2"] .v2-src-mini:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* Feed form — label/url inputs + active mini chip. */
+[data-skin="v2"] .v2-src-feedform {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+[data-skin="v2"] .v2-src-input {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: var(--fb);
+  font-size: calc(14px * var(--read-scale));
+  color: var(--ink);
+  outline: none;
+}
+[data-skin="v2"] .v2-src-input::placeholder {
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-src-mini.on {
+  background: var(--forest-q);
+  border-color: var(--forest-q);
+  color: var(--forest);
+}
+
+/* "Where do I find this link?" — the secret .ics how-to, shown while the
+ * add-calendar form is open. Calm, grouped, numbered — Apple-style help. */
+[data-skin="v2"] .v2-src-ics {
+  margin-top: 4px;
+  padding: 13px 15px;
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+[data-skin="v2"] .v2-src-ics-h {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+[data-skin="v2"] .v2-src-ics-app {
+  font-family: var(--fb);
+  font-size: calc(13px * var(--read-scale));
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+[data-skin="v2"] .v2-src-ics-steps {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+[data-skin="v2"] .v2-src-ics-steps li {
+  font-family: var(--fb);
+  font-size: calc(13px * var(--read-scale));
+  line-height: 1.5;
+  color: var(--soft);
+}
+[data-skin="v2"] .v2-src-ics-steps li b {
+  color: var(--ink);
+  font-weight: 600;
+}
+[data-skin="v2"] .v2-src-ics-note {
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}

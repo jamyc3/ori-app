@@ -1,0 +1,367 @@
+/* Ori v2 — Day view
+ * Per-day rings + readings + parts + that day's letter inline.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-day {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+}
+
+[data-skin="v2"] .v2-day-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(32px * var(--read-scale));
+  color: var(--ink);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 6px 0 0;
+}
+/* Meta row under the title — reading count on the left, "Read letter" on the
+ * right. Keeps the title on its own full-width line above. */
+[data-skin="v2"] .v2-day-metarow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0 24px;
+}
+[data-skin="v2"] .v2-day-read-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 22px;
+  background: var(--forest-q);
+  border: 1px solid var(--forest-q);
+  color: var(--forest);
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s;
+}
+[data-skin="v2"] .v2-day-read-btn:active {
+  transform: scale(.95);
+}
+[data-skin="v2"] .v2-day-sub {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0;
+}
+
+[data-skin="v2"] .v2-day-eyebrow {
+  font-family: var(--fm);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+/* Mini rings — where the day landed. Only populated rings render, so the row
+ * is centered and each tile sizes to ~a third rather than stretching: one
+ * lonely reading reads as a tidy stat, not a wide empty panel. */
+[data-skin="v2"] .v2-day-rings {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+[data-skin="v2"] .v2-day-ring {
+  flex: 0 1 132px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  padding: 14px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+[data-skin="v2"] .v2-dr-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--forest);
+}
+[data-skin="v2"] .v2-dr-dot.sage  { background: var(--sage); }
+[data-skin="v2"] .v2-dr-dot.amber { background: var(--amber); }
+[data-skin="v2"] .v2-dr-dot.ink   { background: var(--ink); }
+[data-skin="v2"] .v2-dr-score {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(24px * var(--read-scale));
+  color: var(--ink);
+  line-height: 1;
+}
+[data-skin="v2"] .v2-dr-lbl {
+  font-family: var(--fm);
+  font-size: 8px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-day-ring .v2-prov-chip {
+  margin-top: 2px;
+  opacity: .5;
+  transition: opacity .15s;
+}
+[data-skin="v2"] .v2-day-ring .v2-prov-chip:active,
+[data-skin="v2"] .v2-day-ring .v2-prov-chip:hover {
+  opacity: 1;
+}
+
+/* Letter card on the day view. */
+[data-skin="v2"] .v2-day-letter {
+  background: var(--fresh);
+  border: 1px solid var(--forest-q);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  cursor: pointer;
+  transition: transform .15s;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  margin-bottom: 24px;
+}
+[data-skin="v2"] .v2-day-letter:active {
+  transform: scale(.99);
+}
+[data-skin="v2"] .v2-day-letter.pending {
+  background: var(--card);
+  border-color: var(--hair);
+  cursor: default;
+}
+[data-skin="v2"] .v2-dl-eye {
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 8px;
+}
+[data-skin="v2"] .v2-day-letter.pending .v2-dl-eye {
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-day-letter p {
+  margin: 0;
+  font-family: var(--fr);
+  font-style: italic;
+  font-size: calc(16.5px * var(--read-scale));
+  line-height: 1.5;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-day-letter.pending p {
+  font-style: normal;
+  font-size: calc(14px * var(--read-scale));
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dl-open {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+/* Readings list — what you said. */
+[data-skin="v2"] .v2-day-read {
+  padding: 14px 0;
+  border-top: 1px solid var(--hair);
+}
+[data-skin="v2"] .v2-day-read .v2-dr-time {
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-day-read p {
+  margin: 6px 0 0;
+  font-family: var(--fr);
+  font-size: calc(16px * var(--read-scale));
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--soft);
+  text-wrap: pretty;
+}
+
+/* A reflection from the parts flow ("say a little about <part>") lands in the
+   journal too — a quiet ripple + the part it was about, with a soft left accent
+   so it reads as a different kind of entry without shouting. */
+[data-skin="v2"] .v2-day-read.is-reflection {
+  border-left: 2px solid color-mix(in srgb, var(--sage, var(--forest)) 55%, transparent);
+  padding-left: 12px;
+}
+[data-skin="v2"] .v2-dr-refl {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sage, var(--forest));
+}
+[data-skin="v2"] .v2-dr-refl svg { display: block; }
+
+/* Entry head row: timestamp on the left, reflection tag / edited mark / pencil
+   on the right. Keeps the edit affordance quiet and out of the reading line. */
+[data-skin="v2"] .v2-dr-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 14px;
+}
+[data-skin="v2"] .v2-dr-headend {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-skin="v2"] .v2-dr-edited {
+  font-family: var(--fm);
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+[data-skin="v2"] .v2-dr-editbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  margin: -4px;
+  background: none;
+  border: none;
+  color: var(--faint);
+  cursor: pointer;
+  transition: color .15s, transform .15s;
+}
+[data-skin="v2"] .v2-dr-editbtn:active { transform: scale(.9); color: var(--forest); }
+
+/* A word the transcriber was unsure of — a calm dotted underline (a mirror, not
+   an alarm). It's a real button so a tap opens the editor on that word. */
+[data-skin="v2"] .v2-dr-lowconf {
+  font: inherit;
+  font-style: italic;
+  color: var(--soft);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+[data-skin="v2"] .v2-dr-lowconf:active { color: var(--ink); }
+[data-skin="v2"] .v2-dr-hint {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .04em;
+  color: var(--faint);
+}
+
+/* Inline editor — matches the writing surface: a soft serif textarea + a quiet
+   Cancel and a forest Save (same palette as "Read letter"). */
+[data-skin="v2"] .v2-dr-editbox { margin-top: 8px; }
+[data-skin="v2"] .v2-dr-editarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 84px;
+  resize: none;
+  padding: 12px;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--fr);
+  font-size: calc(16px * var(--read-scale));
+  line-height: 1.5;
+}
+[data-skin="v2"] .v2-dr-editarea:focus { outline: none; border-color: var(--forest-q); }
+[data-skin="v2"] .v2-dr-editactions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+[data-skin="v2"] .v2-dr-cancel,
+[data-skin="v2"] .v2-dr-save,
+[data-skin="v2"] .v2-dr-delete {
+  padding: 8px 16px;
+  border-radius: 22px;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s, opacity .15s;
+}
+/* Delete keeps a quiet outline rather than a loud fill — destructive but not
+   alarming, in keeping with Ori's gentle tone. */
+[data-skin="v2"] .v2-dr-delete {
+  background: none;
+  border: 1px solid var(--clay, #b56a5a);
+  color: var(--clay, #b56a5a);
+}
+[data-skin="v2"] .v2-dr-delete:active { transform: scale(.95); }
+/* "Delete this entry?" sits on the left of the action row, pushing the choices
+   to the right via the row's flex justify-content. */
+[data-skin="v2"] .v2-dr-confirmq {
+  flex: 1;
+  align-self: center;
+  font-size: 12px;
+  color: var(--ink);
+}
+[data-skin="v2"] .v2-dr-cancel {
+  background: none;
+  border: 1px solid var(--hair);
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-dr-save {
+  background: var(--forest);
+  border: 1px solid var(--forest);
+  color: var(--card);
+}
+[data-skin="v2"] .v2-dr-save:disabled { opacity: .45; cursor: default; }
+[data-skin="v2"] .v2-dr-cancel:active,
+[data-skin="v2"] .v2-dr-save:active { transform: scale(.95); }
+
+/* Parts pills on the day view. */
+[data-skin="v2"] .v2-day-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 24px;
+}
+[data-skin="v2"] .v2-day-part {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+[data-skin="v2"] .v2-day-part:active {
+  transform: scale(.97);
+}

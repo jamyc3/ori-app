@@ -1,0 +1,95 @@
+/* First-run feature tour — spotlight coachmark. Portaled to <body>, so these
+   rules can't be shadowed by skin-scoped selectors; they stand alone.
+
+   Layout model:
+   - .v2-tour-dim   full-screen transparent tap-blocker (page beneath inert).
+   - .v2-tour-spot  the bright ring + the dimming (one huge box-shadow), no taps.
+   - .v2-tour-hit   transparent button exactly over the target → advances.
+   - .v2-tour-card  FULL-WIDTH card pinned to the top or bottom edge (flipped away
+                    from the target). Controls can never clip or be covered. */
+
+.v2-tour {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;            /* above every app layer + tabbar */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.v2-tour-dim {
+  position: absolute;
+  inset: 0;
+  /* transparent — the visible dimming is the spot's box-shadow — but it catches
+     taps so the page underneath isn't interactive mid-tour. */
+  background: transparent;
+}
+
+.v2-tour-spot {
+  position: fixed;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 9999px rgba(18, 22, 16, 0.72),
+    0 0 0 2px rgba(255, 255, 255, 0.6);
+  transition: left .34s cubic-bezier(.4,0,.2,1), top .34s cubic-bezier(.4,0,.2,1),
+              width .34s cubic-bezier(.4,0,.2,1), height .34s cubic-bezier(.4,0,.2,1);
+  animation: v2-tour-pulse 2.1s ease-in-out infinite;
+}
+@keyframes v2-tour-pulse {
+  0%, 100% { box-shadow: 0 0 0 9999px rgba(18,22,16,.72), 0 0 0 2px rgba(255,255,255,.55); }
+  50%      { box-shadow: 0 0 0 9999px rgba(18,22,16,.72), 0 0 0 7px rgba(255,255,255,.18); }
+}
+
+.v2-tour-hit {
+  position: fixed;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 18px;
+}
+
+.v2-tour-card {
+  position: fixed;
+  left: 12px;
+  right: 12px;                 /* full width → Next/Back/Skip can never clip */
+  background: #F8F2E6;
+  color: #1A1A1A;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  animation: v2-tour-card-in .26s ease both;
+}
+.v2-tour-card.at-bottom { bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); }
+.v2-tour-card.at-top    { top: calc(env(safe-area-inset-top, 0px) + 18px); }
+@keyframes v2-tour-card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.v2-tour-h {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-weight: 600;
+  font-size: 19px;
+  margin: 0 0 5px;
+}
+.v2-tour-p { margin: 0 0 14px; font-size: 15px; line-height: 1.5; color: #3a352c; }
+
+.v2-tour-dots { display: flex; gap: 6px; margin: 0 0 14px; }
+.v2-tour-dots i { width: 7px; height: 7px; border-radius: 50%; background: #cdbfa6; }
+.v2-tour-dots i.on { background: #3F5B39; }
+
+.v2-tour-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.v2-tour-nav { display: flex; align-items: center; gap: 6px; }
+.v2-tour-row button {
+  font: inherit; border: 0; cursor: pointer; background: none;
+  min-height: 44px;            /* comfortable tap target */
+  -webkit-tap-highlight-color: transparent;
+}
+.v2-tour-skip { color: #8b8275; font-size: 15px; padding: 0 6px; }
+.v2-tour-back { color: #6F695E; font-size: 15px; padding: 0 14px; }
+.v2-tour-next {
+  background: #3F5B39; color: #F8F2E6; border-radius: 22px;
+  padding: 0 26px; font-size: 15px; font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-tour-spot, .v2-tour-card { animation: none; }
+}

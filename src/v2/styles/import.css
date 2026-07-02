@@ -1,0 +1,100 @@
+/* Ori v2 — Import journals (extends the sources.css list shapes). */
+
+[data-skin="v2"] .v2-imp-paste {
+  padding: 14px 0 16px;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+[data-skin="v2"] .v2-imp-ta {
+  width: 100%;
+  background: var(--cardHi);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  color: var(--ink);
+  font-family: var(--fb);
+  font-size: calc(15px * var(--read-scale));
+  line-height: 1.6;
+  padding: 12px 14px;
+  outline: none;
+  resize: vertical;
+}
+[data-skin="v2"] .v2-imp-ta:focus {
+  border-color: var(--forest);
+}
+[data-skin="v2"] .v2-imp-paste-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+[data-skin="v2"] .v2-imp-stage {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--screen);
+  background: var(--forest);
+  border: 0;
+  border-radius: 14px;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+[data-skin="v2"] .v2-imp-stage:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+[data-skin="v2"] .v2-imp-item {
+  flex-wrap: wrap;
+}
+[data-skin="v2"] .v2-imp-kind {
+  font-family: var(--fm);
+  font-style: normal;
+  font-size: 8px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--forest);
+  border: 1px solid var(--forest-q);
+  border-radius: 10px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: 2px;
+}
+
+[data-skin="v2"] .v2-imp-plant {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  font-family: var(--fb);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--screen);
+  background: var(--forest);
+  border: 0;
+  border-radius: 24px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+[data-skin="v2"] .v2-imp-plant:active {
+  transform: scale(.99);
+}
+
+[data-skin="v2"] .v2-imp-done {
+  margin-top: 18px;
+  background: var(--fresh);
+  border: 1px solid var(--forest-q);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+[data-skin="v2"] .v2-imp-done p {
+  font-family: var(--fb);
+  font-size: 14px;
+  color: var(--soft);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}

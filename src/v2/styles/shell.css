@@ -1,0 +1,386 @@
+/* Ori v2 — app shell layout
+ * Header (brand + Inbox icon stub) · content slot · bottom 4-tab nav.
+ * All selectors scoped under [data-skin="v2"]. */
+
+[data-skin="v2"] {
+  margin: 0;
+  padding: 0;
+  background: var(--surround);
+  color: var(--ink);
+  font-family: var(--fb);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The skin attribute lives on <html> (Shell sets it) so the page behind
+ * and around the app column matches the theme — index.css's light v1
+ * background must never show through. Scrolling happens INSIDE
+ * .v2-content; the page itself never scrolls. */
+html[data-skin="v2"],
+html[data-skin="v2"] body {
+  background: var(--surround);
+  height: 100%;
+  overflow: hidden;
+  /* The page itself never rubber-bands — a fixed-layout app must feel stuck to
+   * the glass, not floaty. Pairs with the native scrollView.bounces=false
+   * (MyViewController.swift) for the web/PWA path. */
+  overscroll-behavior: none;
+  /* Fixed-layout, native-feel app — no browser zoom, no auto text-inflation.
+   * touch-action: manipulation on the root kills double-tap-to-zoom (the gesture
+   * the viewport meta + zoomScale clamp can miss — Capacitor #8226) while keeping
+   * ALL panning intact: vertical scrollers and the horizontal lens carousel both
+   * still work (pan-y on an ancestor would intersect a child's pan-x to nothing).
+   * Pinch zoom is killed by the native scrollView clamp + viewport meta.
+   * text-size-adjust pins WKWebView from re-inflating type after rotation. */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Scrollbars are invisible in the app — content scrolls, chrome doesn't.
+ * (Touch and trackpad scrolling are unaffected; this is visual only.) */
+html[data-skin="v2"] * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html[data-skin="v2"] *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+[data-skin="v2"] *,
+[data-skin="v2"] *::before,
+[data-skin="v2"] *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Static app — a long-press should never raise the iOS copy / define / share
+ * callout or the selection magnifier on UI chrome (it reads as "the screen got
+ * copied"). Selection is re-enabled below only on the prose a user actually owns
+ * (the Letter, their journal entries). */
+[data-skin="v2"] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Reading surfaces stay selectable — a user may want to copy a line of the
+ * Letter or their own journal entry. */
+[data-skin="v2"] .v2-letter-body,
+[data-skin="v2"] .v2-day-read p,
+[data-skin="v2"] .v2-le-body {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Form controls render at >=16px so iOS never auto-zooms the viewport on focus
+ * (its heuristic zooms anything smaller). The native zoom clamp covers the iOS
+ * app; this keeps the web/PWA build from zooming into inputs too. */
+[data-skin="v2"] input,
+[data-skin="v2"] textarea,
+[data-skin="v2"] select {
+  font-size: 16px;
+}
+
+/* Frame — a fixed app column pinned to the VISIBLE viewport.
+ *
+ * We pin with position:fixed + inset:0 rather than height:100dvh on purpose.
+ * In the iOS WKWebView under viewport-fit=cover, `100dvh` resolves to the
+ * LARGE viewport (full screen incl. the top safe area) — measured 936px on a
+ * 874px screen — so a normal-flow 100dvh frame overhangs the bottom by exactly
+ * env(safe-area-inset-top), pushing the tab bar's labels off the screen. A
+ * position:fixed box binds to the actual visual viewport instead, so the frame
+ * is exactly as tall as what the user can see, and the per-edge env() insets
+ * (top here, bottom on the tab bar) land correctly. */
+[data-skin="v2"] .v2-frame {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: var(--screen);
+  overflow: hidden;
+  /* The frame owns the safe area (Apple HIG): its background bleeds edge-to-edge
+   * (full bleed), while these insets keep CONTENT clear of the status bar / notch
+   * — top here, and left/right so nothing slides under the Dynamic Island when
+   * the device is rotated to landscape (both are 0 in portrait, so this is inert
+   * there). Bottom inset stays per-footer via env(safe-area-inset-bottom).
+   * Requires ios.contentInset = "never" — "always" zeroes these env values. */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+@media (min-width: 560px) {
+  [data-skin="v2"] .v2-frame {
+    border-left: 1px solid var(--hair);
+    border-right: 1px solid var(--hair);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Header — brand left, Inbox icon right. */
+[data-skin="v2"] .v2-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 12px;
+  gap: 12px;
+}
+
+[data-skin="v2"] .v2-brand {
+  font-family: var(--fd);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--soft);
+  letter-spacing: .02em;
+}
+
+/* Service notice — operator-flagged outage strip (e.g. voice/STT down).
+   Chrome, like the header: it owns its own 24px side margins and never
+   touches the v2-content gutter. */
+[data-skin="v2"] .v2-svc-note {
+  flex: 0 0 auto;
+  margin: 10px 24px 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--amber) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber) 34%, transparent);
+  color: var(--soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+[data-skin="v2"] .v2-inbox {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+  color: var(--soft);
+}
+
+[data-skin="v2"] .v2-inbox svg {
+  width: 21px;
+  height: 21px;
+  color: var(--ink);
+}
+
+[data-skin="v2"] .v2-inbox:active {
+  transform: scale(.93);
+  background: var(--cardHi);
+}
+
+[data-skin="v2"] .v2-inbox .v2-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--forest);
+  color: var(--screen);
+  font-family: var(--fm);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--screen);
+}
+
+/* Scroll wrapper — a transparent flex passthrough that takes the content's old
+ * place in the frame column. It gives pull-to-refresh a positioning context and
+ * clips the content as it's drawn down, so it never paints over the tab bar.
+ * The content box (and the safe-area math) is unchanged. */
+[data-skin="v2"] .v2-scrollwrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Content slot — fills remaining height, scrolls.
+ * This is the SINGLE owner of the page gutter + bottom inset (tokens.css).
+ * Every surface (base tab and overlay alike) renders inside this box and
+ * therefore shares one identical frame — surfaces never re-declare a page
+ * gutter of their own. See docs/LAYOUT_CONTRACT.md. */
+[data-skin="v2"] .v2-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 0 var(--v2-gutter) var(--v2-bottom-safe);
+  display: flex;
+  flex-direction: column;
+}
+
+/* LOCKED vertical fill — center a sparse block in the slack its surface
+ * leaves, instead of letting it stack at the top into a void. Apply
+ * `is-center` to the content block of a short state (a letter still
+ * writing, an empty / calibrating message, a single-message confirmation).
+ * The surface root is already a flex column that fills the frame, so
+ * margin:auto absorbs the slack symmetrically; any pinned header above it
+ * stays put. Tall content leaves no slack, so this is inert — safe to
+ * leave on. This is the one rule for vertical fill; surfaces add the
+ * class, never bespoke centering. See docs/LAYOUT_CONTRACT.md. */
+[data-skin="v2"] .v2-content .is-center {
+  margin-block: auto;
+}
+
+/* Pull-to-refresh — the indicator sits above the content and is revealed as the
+ * content translates down under the pull. Its height tracks the pull distance. */
+[data-skin="v2"] .v2-ptr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+[data-skin="v2"] .v2-ptr-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+[data-skin="v2"] .v2-ptr-spin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--hair);
+  border-top-color: var(--soft);
+  transition: border-top-color .2s ease, transform .2s ease;
+}
+[data-skin="v2"] .v2-ptr.hard .v2-ptr-spin {
+  border-top-color: var(--forest);
+  transform: rotate(180deg);
+}
+[data-skin="v2"] .v2-ptr.busy .v2-ptr-spin {
+  animation: v2-ptr-spin .7s linear infinite;
+}
+[data-skin="v2"] .v2-ptr-label {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+@keyframes v2-ptr-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="v2"] .v2-ptr.busy .v2-ptr-spin { animation-duration: 1.5s; }
+  [data-skin="v2"] .v2-content { transition: none !important; }
+}
+
+[data-skin="v2"] .v2-stub {
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  font-family: var(--fb);
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+[data-skin="v2"] .v2-stub b {
+  display: block;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--forest);
+  margin-bottom: 6px;
+}
+
+/* Bottom tab bar — a floating glass pill, icon-only (Instagram-style).
+ * It's lifted out of the frame's flex column (position:absolute) and centered
+ * above the home indicator, so the content scrolls *behind* it. The scrollwrap
+ * reclaims the vacated height; .v2-content gets bottom clearance (below) so the
+ * last rows never hide under the pill. Only ever shown on the four base tabs
+ * (chrome is hidden on full-bleed surfaces), so the clearance is scoped via
+ * .has-tabbar. */
+[data-skin="v2"] .v2-tabbar {
+  position: absolute;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px;
+  border-radius: 30px;
+  /* Reuse the app's themed glass (tokens.css) — dark glass in nightfall/dusk,
+   * light glass in day — so it matches every other translucent surface. */
+  background-color: var(--glass-bg);
+  background-image: var(--glass-sheen);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+[data-skin="v2"] .v2-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 46px;
+  border-radius: 22px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color .2s ease, background .2s ease, transform .15s ease;
+  padding: 0;
+}
+
+[data-skin="v2"] .v2-tab svg {
+  width: 23px;
+  height: 23px;
+  transition: transform .15s ease;
+}
+
+/* Active tab — a soft green capsule slides behind its icon ("you are here"). */
+[data-skin="v2"] .v2-tab.on {
+  color: var(--forest);
+  background: var(--forest-q);
+}
+
+[data-skin="v2"] .v2-tab:active {
+  transform: scale(.9);
+}
+
+/* Content clearance — only when the floating pill is present, pad the scroll
+ * box so the last content row clears it (≈ pill height + lift + safe area). */
+[data-skin="v2"] .v2-frame.has-tabbar .v2-content {
+  padding-bottom: var(--v2-tabbar-clear);
+}

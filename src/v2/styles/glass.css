@@ -1,0 +1,36 @@
+/* Ori v2 — glass widget treatment.
+ *
+ * The card surfaces across v2 ("widget boxes") share one glossy look: the
+ * themed --glass-bg tint, a top-down sheen, a bright edge, a soft lift, and
+ * a backdrop blur so what's behind frosts through. Tokens live in tokens.css
+ * (per theme); this file only paints them onto the box classes.
+ *
+ * Imported LAST in Shell.jsx so it layers over each surface's own card rule
+ * (equal specificity — source order wins). Add a new box class to the list
+ * and it joins the set; tune the look once, in the tokens. */
+
+[data-skin="v2"] .v2-pat-card,
+[data-skin="v2"] .v2-pat-stat,
+[data-skin="v2"] .v2-tile,
+[data-skin="v2"] .v2-group,
+[data-skin="v2"] .v2-src-group,
+[data-skin="v2"] .v2-cal,
+[data-skin="v2"] .v2-ring-chart,
+[data-skin="v2"] .v2-ring-anchor,
+[data-skin="v2"] .v2-ring-full,
+[data-skin="v2"] .v2-day-letter,
+[data-skin="v2"] .v2-prow,
+[data-skin="v2"] .v2-pd-holding,
+[data-skin="v2"] .v2-pd-stat,
+[data-skin="v2"] .v2-pd-thank,
+[data-skin="v2"] .v2-ob-mode,
+[data-skin="v2"] .v2-ob-ack,
+[data-skin="v2"] .v2-pdt-card,
+[data-skin="v2"] .v2-pdt-stat {
+  background-color: var(--glass-bg);
+  background-image: var(--glass-sheen);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}

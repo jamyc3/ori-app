@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ori — Your mind, written down.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #F7F3EC;
+    --paper:  #FBF7EE;
+    --card:   #FFFCF6;
+    --ink:    #1a1a1a;
+    --soft:   #2B2824;
+    --muted:  #6F695E;
+    --faint:  #B8B09D;
+    --hair:   rgba(26,26,26,0.07);
+    --line:   rgba(26,26,26,0.12);
+    --leaf:   #3F5B39;
+    --moss:   #4F8A5F;
+    --bloom:  #C98660;
+    --bronze: #A07258;
+    --indigo: #475A78;
+    --warn:   #C4902A;
+    --fd: 'Playfair Display', Georgia, serif;
+    --fb: 'Source Serif 4', Georgia, serif;
+    --fm: 'DM Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--fb);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* ── Type — restrained ───────────────────────────────── */
+  .eyebrow {
+    font-family: var(--fm);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1.hero {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .sublime {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(17px, 1.7vw, 22px);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+    color: var(--soft);
+    margin: 0;
+  }
+  h2.section {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -0.012em;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+  p.lede {
+    font-family: var(--fb);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 36em;
+    margin: 0 0 14px;
+  }
+
+  /* ── Layout ──────────────────────────────────────────── */
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 36px;
+  }
+  section { padding: 88px 0; border-bottom: 1px solid var(--hair); }
+  section:last-child { border-bottom: none; }
+
+  /* ── Top nav ─────────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247,243,236,0.86);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--hair);
+  }
+  nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 12px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav .brand {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  nav .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--fm);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: transform .2s, box-shadow .2s;
+  }
+  nav .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(28,24,20,0.18); }
+
+  /* ── Buttons ─────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--fm);
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(28,24,20,0.22);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    text-decoration: none;
+    font-family: var(--fm);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: background .2s, border-color .2s;
+  }
+  .btn-secondary:hover { background: var(--paper); border-color: var(--ink); }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Hero ────────────────────────────────────────────── */
+  .hero-section {
+    padding: 110px 0 80px;
+  }
+  .hero-section .eyebrow { margin-bottom: 22px; display: block; }
+  .hero-section .hero { margin-bottom: 18px; max-width: 16em; }
+  .hero-section .sublime { margin-bottom: 38px; max-width: 32em; color: var(--muted); }
+
+  .hero-shot {
+    display: flex;
+    justify-content: center;
+    margin-top: 68px;
+  }
+
+  /* ── Phone frame ─────────────────────────────────────── */
+  .phone {
+    width: 300px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-radius: 36px;
+    box-shadow: 0 24px 64px rgba(28,24,20,0.18), 0 4px 14px rgba(28,24,20,0.07);
+    position: relative;
+    overflow: hidden;
+    height: 612px;
+    padding: 50px 18px 0;
+  }
+  .phone .notch {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 84px; height: 24px;
+    background: rgba(0,0,0,0.85);
+    border-radius: 14px;
+  }
+
+  /* ── Generic small UI atoms used in screen mocks ──── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    font-family: var(--fm);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pill .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--leaf); }
+  .ph-h {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 14px 0 20px;
+  }
+  .circles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .cc {
+    background: var(--card);
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    padding: 10px 6px 9px;
+    text-align: center;
+  }
+  .ring {
+    position: relative;
+    width: 56px; height: 56px;
+    margin: 0 auto 4px;
+  }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .num {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: 15px; color: var(--ink);
+  }
+  .cc .lbl { font-family: var(--fb); font-size: 10px; color: var(--soft); margin: 2px 0 0; }
+  .cc .dlt {
+    font-family: var(--fm); font-size: 8px;
+    letter-spacing: 0.06em; color: var(--muted); margin-top: 1px;
+  }
+  .strip {
+    margin-top: 16px;
+    padding: 9px 12px;
+    background: var(--card);
+    border: 1px solid var(--hair);
+    border-radius: 11px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11.5px;
+  }
+  .strip b { font-weight: 500; }
+  .strip .right {
+    font-family: var(--fm);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--leaf);
+  }
+
+  /* ── Screen 2: Bucket card with chart ────────────────── */
+  .ph-2 .eye {
+    font-family: var(--fm);
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .ph-2 .name {
+    font-family: var(--fd);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .ph-2 .heroBox {
+    background: var(--card);
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    padding: 12px 14px 10px;
+    margin-bottom: 10px;
+  }
+  .ph-2 .heroBox .big {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: 28px; line-height: 1; color: var(--ink);
+  }
+  .ph-2 .heroBox .of {
+    font-family: var(--fm); font-size: 9px;
+    color: var(--faint); margin-left: 4px; letter-spacing: 0.06em;
+  }
+  .ph-2 .heroBox .bar {
+    position: relative; height: 6px; border-radius: 999px;
+    background: rgba(26,26,26,0.06);
+    overflow: hidden; margin: 10px 0 3px;
+  }
+  .ph-2 .heroBox .bar .fl {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 62%; background: var(--leaf); border-radius: 999px;
+  }
+  .ph-2 .heroBox .bar .tk {
+    position: absolute; top: -2px; bottom: -2px;
+    width: 1.5px; background: var(--soft); left: 58%;
+  }
+  .ph-2 .rows { border-top: 1px solid var(--hair); }
+  .ph-2 .rw {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 0; border-bottom: 1px solid var(--hair);
+  }
+  .ph-2 .rw .d { width: 8px; height: 8px; border-radius: 50%; background: var(--moss); flex-shrink: 0; }
+  .ph-2 .rw .d.amber { background: var(--warn); }
+  .ph-2 .rw .nm { flex: 1; font-family: var(--fb); font-size: 12px; color: var(--soft); }
+  .ph-2 .rw .vl { font-family: var(--fm); font-size: 11px; color: var(--ink); }
+  .ph-2 .rw .ar { font-family: var(--fm); font-size: 10px; color: var(--moss); margin-left: 4px; width: 10px; text-align: right; }
+  .ph-2 .rw .ar.dn { color: var(--warn); }
+  .ph-2 .rw .ar.fl { color: var(--muted); }
+
+  .ph-2 .chartBox {
+    padding: 10px 12px 8px;
+    background: var(--card);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    margin: 6px 0 4px;
+  }
+  .ph-2 .chartBox .readout {
+    font-family: var(--fm);
+    font-size: 9px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  /* ── Screen 3: The Letter ────────────────────────────── */
+  .ph-3 .letterHead {
+    font-family: var(--fm); font-size: 9px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .ph-3 .letterTitle {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 400;
+    font-size: 22px; line-height: 1.2;
+    color: var(--ink); margin: 0 0 14px;
+  }
+  .ph-3 .letterCard {
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    padding: 16px 16px 18px;
+    box-shadow: 0 6px 18px rgba(28,24,20,0.04);
+  }
+  .ph-3 .letterCard p {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: 13.5px; line-height: 1.55;
+    color: var(--soft); margin: 0 0 10px;
+  }
+  .ph-3 .letterCard p:last-of-type { margin-bottom: 14px; }
+  .ph-3 .letterCard .sign {
+    font-family: var(--fd);
+    font-style: italic; font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── Screen 4: WHO-5 intake ──────────────────────────── */
+  .ph-4 .who5head {
+    font-family: var(--fm); font-size: 9px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .ph-4 .who5title {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 400;
+    font-size: 19px; line-height: 1.25;
+    color: var(--ink); margin: 0 0 18px;
+  }
+  .ph-4 .q {
+    border-top: 1px solid var(--hair);
+    padding: 12px 0;
+  }
+  .ph-4 .q:last-of-type { border-bottom: 1px solid var(--hair); margin-bottom: 14px; }
+  .ph-4 .q p {
+    margin: 0 0 8px;
+    font-family: var(--fb);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .ph-4 .q .dots {
+    display: flex; gap: 7px;
+  }
+  .ph-4 .q .dots .o {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+  }
+  .ph-4 .q .dots .o.on { background: var(--leaf); border-color: var(--leaf); }
+  .ph-4 .score {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 12px;
+  }
+  .ph-4 .score .lbl {
+    font-family: var(--fm); font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ph-4 .score .val {
+    font-family: var(--fd); font-style: italic; font-weight: 300;
+    font-size: 26px; color: var(--ink);
+  }
+  .ph-4 .score .band {
+    font-family: var(--fm); font-size: 9px;
+    color: var(--moss); margin-left: 6px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* ── Phone gallery grid ──────────────────────────────── */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 44px;
+  }
+  .gallery .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .gallery .item .caption {
+    margin-top: 28px;
+    max-width: 22em;
+    text-align: center;
+  }
+  .gallery .item .caption .key {
+    font-family: var(--fm);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .gallery .item .caption .ln {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: 22px; line-height: 1.25;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ── Privacy section ─────────────────────────────────── */
+  .privacy {
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(63,91,57,0.04) 100%);
+    margin-left: -36px; margin-right: -36px;
+    padding-left: 36px; padding-right: 36px;
+  }
+  .privacy h2.section { color: var(--leaf); margin-bottom: 22px; }
+  .privacy .lines {
+    margin-top: 18px;
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: clamp(17px, 1.8vw, 22px);
+    line-height: 1.55;
+    color: var(--soft);
+    max-width: 32em;
+  }
+  .privacy .lines span { display: block; margin-bottom: 4px; }
+  .privacy .lines span b { color: var(--ink); font-weight: 400; }
+  .privacy .lines .faint { color: var(--faint); margin-top: 14px; }
+
+  /* ── Forty days outcomes ─────────────────────────────── */
+  .outcomes .days {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: clamp(56px, 9vw, 120px);
+    line-height: 0.95;
+    color: var(--leaf);
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  .outcomes .days small {
+    font-family: var(--fb); font-style: normal; font-weight: 400;
+    font-size: 0.20em; color: var(--muted);
+    margin-left: 14px; vertical-align: middle; letter-spacing: 0;
+  }
+  .outcomes .you-will {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.35;
+    color: var(--ink);
+    margin-top: 24px;
+    max-width: 22em;
+  }
+  .outcomes .you-will span { display: block; }
+
+  /* ── Final CTA section ───────────────────────────────── */
+  .final {
+    text-align: center;
+    padding: 130px 36px 90px;
+    background: var(--paper);
+  }
+  .final h2 {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.05;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+  .final .sub {
+    font-family: var(--fb);
+    font-style: italic;
+    font-size: clamp(16px, 1.6vw, 20px);
+    color: var(--muted);
+    margin: 0 0 36px;
+  }
+  .final .cta-row { justify-content: center; }
+
+  footer {
+    text-align: center;
+    padding: 60px 36px 60px;
+    border-top: 1px solid var(--hair);
+  }
+  footer .mark {
+    font-family: var(--fd);
+    font-style: italic; font-weight: 300;
+    font-size: 28px;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  footer .copyright {
+    font-family: var(--fm);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  @media (max-width: 900px) {
+    .gallery { grid-template-columns: 1fr; gap: 60px; }
+    section { padding: 64px 0; }
+    .hero-section { padding: 70px 0 50px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── Top nav with persistent Try it now ─────────────── -->
+<nav>
+  <div class="inner">
+    <div class="brand"><em>Ori</em></div>
+    <a class="nav-cta" href="https://talk-to-me.ideaflow.page/" target="_blank" rel="noopener">Try it now →</a>
+  </div>
+</nav>
+
+
+<!-- ─── Hero ───────────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="wrap">
+    <span class="eyebrow">A new kind of journal</span>
+    <h1 class="hero">Your mind,<br/>written down.</h1>
+    <p class="sublime">A daily record with a backbone. Honest math, your own words, and a friend who remembers.</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="https://talk-to-me.ideaflow.page/" target="_blank" rel="noopener">Try it now →</a>
+      <a class="btn-secondary" href="#see">See what you'll see</a>
+    </div>
+
+    <!-- Hero phone shot — You tab landing -->
+    <div class="hero-shot">
+      <div class="phone">
+        <div class="notch"></div>
+        <span class="pill"><span class="dot"></span>Day 24</span>
+        <p class="ph-h">Above your typical reserves,<br/>into a usual day,<br/>you came through even.</p>
+        <div class="circles">
+          <div class="cc">
+            <div class="ring">
+              <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="49" stroke-linecap="round"/>
+              </svg>
+              <div class="num">62</div>
+            </div>
+            <div class="lbl">Reserves</div>
+            <div class="dlt" style="color: var(--moss);">+5</div>
+          </div>
+          <div class="cc">
+            <div class="ring">
+              <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="73" stroke-linecap="round"/>
+              </svg>
+              <div class="num">55</div>
+            </div>
+            <div class="lbl">Demands</div>
+            <div class="dlt">on par</div>
+          </div>
+          <div class="cc">
+            <div class="ring">
+              <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="60" stroke-linecap="round"/>
+              </svg>
+              <div class="num">63</div>
+            </div>
+            <div class="lbl">Form</div>
+            <div class="dlt">on par</div>
+          </div>
+        </div>
+        <div class="strip">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #3F5B39;"></span>
+            <em style="font-family: var(--fd); font-style: italic; font-size: 12.5px; line-height: 1.3; color: var(--ink);">Six nights settled. Body is reading.</em>
+          </span>
+          <span class="right" style="font-family: var(--fm); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #3F5B39;">How you feel →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── What you'll see — 3 phone gallery ──────────────── -->
+<section id="see">
+  <div class="wrap">
+    <span class="eyebrow">What you'll see</span>
+    <h2 class="section">Three views of one day.</h2>
+    <p class="lede">Open the app and what's there is your own day, never anyone else's. Tap any score for the full breakdown. Read your letter at the end.</p>
+
+    <div class="gallery">
+
+      <!-- Screen 1: You tab landing -->
+      <div class="item">
+        <div class="phone">
+          <div class="notch"></div>
+          <span class="pill"><span class="dot"></span>Today</span>
+          <p class="ph-h">Above your typical reserves, into a usual day.</p>
+          <div class="circles">
+            <div class="cc">
+              <div class="ring">
+                <svg viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="49" stroke-linecap="round"/>
+                </svg>
+                <div class="num">62</div>
+              </div>
+              <div class="lbl">Reserves</div>
+              <div class="dlt" style="color: var(--moss);">+5</div>
+            </div>
+            <div class="cc">
+              <div class="ring">
+                <svg viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="73" stroke-linecap="round"/>
+                </svg>
+                <div class="num">55</div>
+              </div>
+              <div class="lbl">Demands</div>
+              <div class="dlt">on par</div>
+            </div>
+            <div class="cc">
+              <div class="ring">
+                <svg viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(26,26,26,0.08)" stroke-width="4"/>
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="#3F5B39" stroke-width="4" stroke-dasharray="163" stroke-dashoffset="60" stroke-linecap="round"/>
+                </svg>
+                <div class="num">63</div>
+              </div>
+              <div class="lbl">Form</div>
+              <div class="dlt">on par</div>
+            </div>
+          </div>
+          <div class="strip">
+            <span style="display: inline-flex; align-items: center; gap: 8px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #3F5B39;"></span>
+              <em style="font-family: var(--fd); font-style: italic; font-size: 12.5px; line-height: 1.3; color: var(--ink);">Six nights settled. Body is reading.</em>
+            </span>
+            <span class="right" style="font-family: var(--fm); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #3F5B39;">How you feel →</span>
+          </div>
+          <div style="margin-top: 16px; padding: 11px 13px; background: var(--paper); border-left: 3px solid var(--bloom); border-radius: 0 6px 6px 0;">
+            <div style="font-family: var(--fm); font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">Worth noticing</div>
+            <p style="font-family: var(--fd); font-style: italic; font-weight: 300; font-size: 12px; line-height: 1.5; margin: 4px 0 0; color: var(--ink);">Your body reads recovered, but your words read strained.</p>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="key">Every day starts here</div>
+          <p class="ln">Today, in three scores — and one sentence to ground them.</p>
+        </div>
+      </div>
+
+      <!-- Screen 2: Bucket detail with chart -->
+      <div class="item">
+        <div class="phone ph-2">
+          <div class="notch"></div>
+          <div class="eye">What you started with</div>
+          <h3 class="name">Reserves</h3>
+          <div class="heroBox">
+            <span class="big">62</span><span class="of">/ 100</span>
+            <div class="bar"><div class="fl"></div><div class="tk"></div></div>
+            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-family: var(--fm); font-size: 7.5px; letter-spacing: 0.06em; color: var(--faint);">
+              <span>below usual</span><span>your typical</span><span>optimal</span>
+            </div>
+          </div>
+          <div class="rows">
+            <div class="rw"><div class="d"></div><span class="nm">Sleep restoration</span><span class="vl">0.84</span><span class="ar">↑</span></div>
+            <div class="rw" style="border-bottom: none;"><div class="d amber"></div><span class="nm">Autonomic readiness</span><span class="vl">0.52</span><span class="ar dn">↓</span></div>
+            <div class="chartBox">
+              <div class="readout">0.52 · Wed, May 13</div>
+              <svg viewBox="0 0 260 60" preserveAspectRatio="none" style="width: 100%; height: 50px;">
+                <defs>
+                  <linearGradient id="gA" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#3F5B39" stop-opacity="0.16"/>
+                    <stop offset="100%" stop-color="#3F5B39" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 8 14 C 22 16, 36 12, 50 14 S 78 18, 92 22 S 120 16, 134 18 S 162 24, 176 28 S 204 32, 218 36 L 242 42 L 242 56 L 8 56 Z" fill="url(#gA)"/>
+                <path d="M 8 14 C 22 16, 36 12, 50 14 S 78 18, 92 22 S 120 16, 134 18 S 162 24, 176 28 S 204 32, 218 36 L 242 42" fill="none" stroke="#3F5B39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="208" y1="6" x2="208" y2="48" stroke="#1a1a1a" stroke-width="0.7" opacity="0.35" stroke-dasharray="2 3"/>
+                <circle cx="208" cy="34" r="4" fill="#F7F3EC" stroke="#3F5B39" stroke-width="2"/>
+                <text x="20" y="58" font-family="DM Mono" font-size="7" fill="#B8B09D">T</text>
+                <text x="60" y="58" font-family="DM Mono" font-size="7" fill="#B8B09D">F</text>
+                <text x="100" y="58" font-family="DM Mono" font-size="7" fill="#B8B09D">S</text>
+                <text x="140" y="58" font-family="DM Mono" font-size="7" fill="#B8B09D">M</text>
+                <text x="180" y="58" font-family="DM Mono" font-size="7" fill="#B8B09D">T</text>
+                <text x="226" y="58" font-family="DM Mono" font-size="7" font-weight="500" fill="#1a1a1a">W</text>
+              </svg>
+            </div>
+            <div class="rw"><div class="d"></div><span class="nm">What you have left</span><span class="vl">0.78</span><span class="ar fl">—</span></div>
+            <div class="rw" style="border-bottom: none;"><div class="d"></div><span class="nm">Carried-over strain</span><span class="vl">1.00</span><span class="ar fl">—</span></div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="key">Tap any score</div>
+          <p class="ln">A clean breakdown of what each number is built on — with the chart you can scrub.</p>
+        </div>
+      </div>
+
+      <!-- Screen 3: The Letter -->
+      <div class="item">
+        <div class="phone ph-3">
+          <div class="notch"></div>
+          <div class="letterHead">Wednesday · May 13 · 21:14</div>
+          <h3 class="letterTitle">Your reading.</h3>
+          <div class="letterCard">
+            <p>Today began with reserves above your usual — the kind that show up when sleep is honest.</p>
+            <p>When meetings stacked back-to-back this afternoon, the tone of your words shifted before the count of decisions did. Your body might be flagging something earlier than your mind notices.</p>
+            <p>You came through this day even.</p>
+            <p class="sign">— Ori</p>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="key">End of day</div>
+          <p class="ln">A letter, not a verdict. A noticing of what your own days have shown.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── 30 seconds — WHO-5 ─────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">Thirty seconds, once a day</span>
+    <h2 class="section">A check-in that<br/>actually checks something in.</h2>
+    <p class="lede">Five short questions, asked by clinicians for thirty years and cited in 800+ peer-reviewed studies. Your honest reply becomes the anchor for the rest of the day's reading.</p>
+
+    <div style="display: flex; justify-content: center; margin-top: 40px;">
+      <div class="phone ph-4">
+        <div class="notch"></div>
+        <div class="who5head">Daily check-in · WHO-5</div>
+        <h3 class="who5title">Over the last two weeks…</h3>
+        <div class="q">
+          <p>I have felt cheerful and in good spirits.</p>
+          <div class="dots"><div class="o"></div><div class="o"></div><div class="o"></div><div class="o on"></div><div class="o"></div><div class="o"></div></div>
+        </div>
+        <div class="q">
+          <p>I have felt calm and relaxed.</p>
+          <div class="dots"><div class="o"></div><div class="o"></div><div class="o on"></div><div class="o"></div><div class="o"></div><div class="o"></div></div>
+        </div>
+        <div class="q">
+          <p>I have felt active and vigorous.</p>
+          <div class="dots"><div class="o"></div><div class="o"></div><div class="o"></div><div class="o"></div><div class="o on"></div><div class="o"></div></div>
+        </div>
+        <div class="q">
+          <p>I woke up feeling fresh and rested.</p>
+          <div class="dots"><div class="o"></div><div class="o"></div><div class="o on"></div><div class="o"></div><div class="o"></div><div class="o"></div></div>
+        </div>
+        <div class="q">
+          <p>My daily life has been filled with things that interest me.</p>
+          <div class="dots"><div class="o"></div><div class="o"></div><div class="o"></div><div class="o on"></div><div class="o"></div><div class="o"></div></div>
+        </div>
+        <div class="score">
+          <span class="lbl">Score</span>
+          <div>
+            <span class="val">64</span><span class="band">Moderate wellbeing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Privacy ────────────────────────────────────────── -->
+<section class="privacy">
+  <div class="wrap">
+    <span class="eyebrow">Privacy is the foundation</span>
+    <h2 class="section">Your record<br/>stays yours.</h2>
+    <div class="lines">
+      <span>Your journal <b>stays on your device.</b> Always.</span>
+      <span>Your check-ins <b>stay on your device.</b> Always.</span>
+      <span>Your patterns <b>stay on your device.</b> Always.</span>
+      <span class="faint">No analytics. No accounts. No data lake.</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Forty days ─────────────────────────────────────── -->
+<section class="outcomes">
+  <div class="wrap">
+    <span class="eyebrow">A few weeks in</span>
+    <div class="days">40<small>days in</small></div>
+    <div class="you-will">
+      <span>You'll see your week.</span>
+      <span>You'll know what tightens you.</span>
+      <span>You'll know what restores you.</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Final CTA ──────────────────────────────────────── -->
+<section class="final">
+  <h2>Open it. Write a day.</h2>
+  <p class="sub">See what your own pages already know.</p>
+  <div class="cta-row">
+    <a class="btn-primary" href="https://talk-to-me.ideaflow.page/" target="_blank" rel="noopener">Try it now →</a>
+  </div>
+</section>
+
+
+<!-- ─── Footer ─────────────────────────────────────────── -->
+<footer>
+  <div class="mark"><em>Ori.</em></div>
+  <p class="copyright">© 2026 · Made with discipline · Honest by design</p>
+</footer>
+
+</body>
+</html>

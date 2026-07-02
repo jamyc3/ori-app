@@ -1,0 +1,290 @@
+/* Ori v2 — Pattern lens detail (drill-down from a Patterns tile).
+ * Reuses the tile graph classes from pattern-tiles.css (.v2-streak-cell,
+ * .v2-rbar, .v2-wx-axis, .v2-ret-fric, .v2-drift-*, .v2-thread-*) so the
+ * graphs look identical, just larger. Only the page chrome + scaled wrappers
+ * live here. Glassy cards are registered in glass.css. All scoped [data-skin="v2"]. */
+
+[data-skin="v2"] .v2-pattern {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: none;
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 12px) + 36px);
+}
+
+[data-skin="v2"] .v2-pdt-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 4px 0 14px;
+}
+
+[data-skin="v2"] .v2-pdt-title {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(27px * var(--read-scale));
+  line-height: 1.18;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin: 0 0 8px;
+  text-wrap: pretty;
+}
+
+[data-skin="v2"] .v2-pdt-lead {
+  font-family: var(--fb);
+  font-size: calc(14.5px * var(--read-scale));
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0 0 18px;
+  text-wrap: pretty;
+}
+
+/* ── Stat strip (Streaks counts) ──────────────────────────────────────── */
+[data-skin="v2"] .v2-pdt-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+[data-skin="v2"] .v2-pdt-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-radius: 16px;
+  padding: 16px 8px 13px;
+}
+[data-skin="v2"] .v2-pdt-stat-n {
+  font-family: var(--fd);
+  font-weight: 300;
+  font-size: calc(34px * var(--read-scale));
+  line-height: .9;
+  color: var(--ink);
+  letter-spacing: -.02em;
+}
+[data-skin="v2"] .v2-pdt-stat-l {
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Card shell ───────────────────────────────────────────────────────── */
+[data-skin="v2"] .v2-pdt-card {
+  border-radius: 18px;
+  padding: 16px 16px 14px;
+  margin-bottom: 14px;
+}
+[data-skin="v2"] .v2-pdt-card-label {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+[data-skin="v2"] .v2-pdt-cal { text-align: center; }
+[data-skin="v2"] .v2-pdt-cal .v2-tile-cal { display: inline-block; margin-bottom: 12px; }
+
+/* ── Streaks — full-season contribution grid (cells reuse .v2-streak-cell) ── */
+[data-skin="v2"] .v2-pdt-streak-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 5px;
+}
+[data-skin="v2"] .v2-pdt-streak-grid button.v2-streak-cell {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: transform .12s ease;
+}
+[data-skin="v2"] .v2-pdt-streak-grid button.v2-streak-cell:active { transform: scale(.9); }
+
+/* ── Rhythms — taller weekday bars (bars reuse .v2-rbar) ──────────────── */
+[data-skin="v2"] .v2-pdt-rbars {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  height: 132px;
+}
+[data-skin="v2"] .v2-pdt-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+[data-skin="v2"] .v2-pdt-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  background: var(--card);
+}
+[data-skin="v2"] .v2-pdt-row-k {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-skin="v2"] .v2-pdt-row-v {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--soft);
+  text-align: right;
+  text-transform: capitalize;
+}
+
+/* ── Weather — large scatter (axes reuse .v2-wx-axis) ─────────────────── */
+[data-skin="v2"] .v2-pdt-wx-plot {
+  position: relative;
+  height: 280px;
+  border-radius: 14px;
+  background: var(--screen);
+  border: 1px solid var(--hair);
+  overflow: hidden;
+}
+[data-skin="v2"] .v2-pdt-wx-q {
+  position: absolute;
+  font-family: var(--fm);
+  font-size: 8.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 7px 9px;
+}
+[data-skin="v2"] .v2-pdt-wx-q.tl { top: 0; left: 0; }
+[data-skin="v2"] .v2-pdt-wx-q.tr { top: 0; right: 0; text-align: right; }
+[data-skin="v2"] .v2-pdt-wx-q.bl { bottom: 0; left: 0; }
+[data-skin="v2"] .v2-pdt-wx-q.br { bottom: 0; right: 0; text-align: right; }
+[data-skin="v2"] .v2-pdt-wx-dot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--amber) 55%, transparent);
+  transform: translate(-50%, -50%);
+  transition: transform .12s ease;
+}
+[data-skin="v2"] .v2-pdt-wx-dot:active { transform: translate(-50%, -50%) scale(1.4); }
+[data-skin="v2"] .v2-pdt-wx-dot.today {
+  width: 16px;
+  height: 16px;
+  background: var(--amber);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--amber) 20%, transparent);
+}
+[data-skin="v2"] .v2-pdt-wx-axes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ── Returns — ranked roster ──────────────────────────────────────────── */
+[data-skin="v2"] .v2-pdt-roster-label { margin: 4px 0 10px; }
+[data-skin="v2"] .v2-pdt-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[data-skin="v2"] .v2-pdt-roster-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease;
+}
+[data-skin="v2"] .v2-pdt-roster-row:active { transform: scale(.99); background: var(--cardHi); }
+[data-skin="v2"] .v2-pdt-roster-glyph {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+[data-skin="v2"] .v2-pdt-roster-name {
+  flex: 1 1 auto;
+  font-family: var(--fd);
+  font-weight: 400;
+  font-size: 15.5px;
+  color: var(--ink);
+  text-transform: capitalize;
+  min-width: 0;
+}
+[data-skin="v2"] .v2-pdt-roster-visits {
+  flex: 0 0 auto;
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Drifts — scaled figure (reuses .v2-drift-num / .v2-drift-rec) ────── */
+[data-skin="v2"] .v2-pdt-drift-fig {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+[data-skin="v2"] .v2-pdt-drift-fig .v2-drift-num { font-size: calc(48px * var(--read-scale)); }
+[data-skin="v2"] .v2-pdt-drift-cap {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Footer + how-link ────────────────────────────────────────────────── */
+[data-skin="v2"] .v2-pdt-how {
+  display: block;
+  width: max-content;
+  margin: 6px auto 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--forest);
+  padding: 8px 4px;
+}
+[data-skin="v2"] .v2-pdt-foot {
+  font-family: var(--fb);
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--faint);
+  text-align: center;
+  margin: 12px 8px 0;
+}
