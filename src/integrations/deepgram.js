@@ -79,8 +79,11 @@ async function getDeepgramKey() {
 }
 // The live-stream URL is built per-session so the STT language can vary — English
 // by default, Bengali (bn) for reflect-mode बांग्ला users. Everything else is fixed.
+// mip_opt_out=true excludes the audio from Deepgram's Model Improvement Program
+// (retained only for the duration of the request) — the privacy policy promises
+// user audio is never used to train models, so this parameter is load-bearing.
 export const buildDeepgramUrl = (language = "en-US") =>
-  `wss://api.deepgram.com/v1/listen?model=nova-3&language=${encodeURIComponent(language)}&smart_format=true&interim_results=true&punctuate=true&endpointing=250&vad_events=true&no_delay=true`;
+  `wss://api.deepgram.com/v1/listen?model=nova-3&language=${encodeURIComponent(language)}&smart_format=true&interim_results=true&punctuate=true&endpointing=250&vad_events=true&no_delay=true&mip_opt_out=true`;
 export const DEEPGRAM_URL = buildDeepgramUrl();
 
 // Reflect-mode language pref. 'bn' when the user chose বাংলা, else English.
